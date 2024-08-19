@@ -186,6 +186,7 @@ class ScoreBoard extends StatelessWidget {
         color: Color(0xFFEEEFF5),
         borderRadius: BorderRadius.circular(15),
       ),
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
