@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merge_capl/Login.dart';
 import 'package:merge_capl/UpcomingPage.dart';
 import 'CompletedPage.dart';
 import 'LivePage.dart';
@@ -15,6 +16,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isUpcomingHovering = false;
   bool _isCompletedHovering = false;
 
+  bool _isLiveSelected = true;
+  bool _isUpcomingSelected = false;
+  bool _isCompletedSelected = false;
   @override
   Widget build(BuildContext context) {
     return
@@ -22,7 +26,12 @@ class _MyHomePageState extends State<MyHomePage> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            // backgroundColor: Colors.grey.shade500,
+            leading: IconButton(
+              onPressed: (){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+              icon: Icon(Icons.arrow_back_ios, color: Colors.grey,),
+            ),
             bottom: TabBar(
               tabs: [
                 MouseRegion(
@@ -40,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       "Live",
                       style: TextStyle(
+                        color: _isLiveSelected ? Colors.blue.shade800 : Colors.black,
                         fontWeight: FontWeight.w900,
                         fontSize: _isLiveHovering ? 20 : 20,
                       ),
@@ -61,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       "Upcoming",
                       style: TextStyle(
+                        color: _isUpcomingSelected ? Colors.blue.shade800 : Colors.black,
                         fontWeight: FontWeight.w900,
                         fontSize: _isUpcomingHovering ? 20 : 15,
                       ),
@@ -82,13 +93,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       "Completed",
                       style: TextStyle(
+                        color: _isCompletedSelected ? Colors.blue.shade800 : Colors.black,
                         fontWeight: FontWeight.w900,
                         fontSize: _isCompletedHovering ? 20 : 15,
                       ),
                     ),
                   ),
                 ),
+
               ],
+              onTap: (index) {
+                setState(() {
+                  _isLiveSelected = index == 0;
+                  _isUpcomingSelected = index == 1;
+                  _isCompletedSelected = index == 2;
+                });
+              },
             ),
           ),
           body: const TabBarView(

@@ -32,7 +32,7 @@ class UpcomingPage extends StatelessWidget {
                   const Center(
                     child: Text(
                       "List Of Upcoming Matches",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white60),
                     ),
                   ),
                   MatchCard(

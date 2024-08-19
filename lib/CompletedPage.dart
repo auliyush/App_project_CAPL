@@ -30,7 +30,7 @@ class CompletedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black, // Text color adjusted for visibility
+                      color: Colors.white60,
                     ),
                   ),
                 ),
