@@ -17,7 +17,7 @@ class LivePage extends StatelessWidget {
           title: const Text(
               'Live Match',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.white60,
               fontWeight: FontWeight.w500,
               fontSize: 27,
             ),
@@ -460,35 +460,4 @@ class _DetailsPageState extends State<DetailsPage> {
       ),
     );
   }
-
-  // Widget _buildBowlerBox(String bowler) {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         bowler,
-  //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-  //       ),
-  //       SizedBox(height: 10),
-  //       Container(
-  //         padding: EdgeInsets.all(5),
-  //         decoration: BoxDecoration(
-  //           border: Border.all(width: 1, color: Colors.black),
-  //           borderRadius: BorderRadius.circular(5),
-  //         ),
-  //         child: const Center(
-  //           child: Text(
-  //             "Balls & Overs",
-  //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }
-/*
-* TabBarView(
-                children: [
-
-                ],
-              ),*/

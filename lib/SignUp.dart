@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:merge_capl/Login.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+// 22:27 ----- 47%
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -11,10 +16,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final apiUrl = "http://localhost:8080/capl/user/signUp";
   final _formKey = GlobalKey<FormState>();
   final Uri _urlFB = Uri.parse("https://www.facebook.com/login/");
   final Uri _urlGoogle = Uri.parse("https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faccounts.google.com%2F&followup=https%3A%2F%2Faccounts.google.com%2F&ifkv=Ab5oB3rLC82jZdK_Rn9ZIGx-Y0m6xw-E3pasF0vtI1ZmtvWmEVG1RQ82oqfe7teAXkQvmV7FiF0Ibw&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S287277681%3A1723466158471857&ddm=0");
 
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
@@ -66,6 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             SizedBox(
                               width: 300,
                               child: TextFormField(
+                                controller: userNameController,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -91,6 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             SizedBox(
                               width: 300,
                               child: TextFormField(
+                                controller: phoneController,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.phone,
                                 validator: (value) {
@@ -209,15 +219,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       const SnackBar(content: Text('Passwords do not match')),
                                     );
                                   } else if (_formKey.currentState!.validate()) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Data Saved!')),
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LoginScreen(),
-                                      ),
-                                    );
+                                    createSignUpRequest();
+
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -290,4 +293,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  Future<void> createSignUpRequest() async {
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "userName": userNameController.text,
+          "userPhone": phoneController.text,
+          "userEmail": emailController.text,
+          "userPassword": confirmPasswordController.text
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Server error: ${response.statusCode}')),
+        );
+      }
+    } on http.ClientException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Network error: $e')),
+      );
+    } on FormatException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid response from server')),
+      );
+    } catch (e) {
+      print('Unknown Error: $e'); // log the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An unknown error occurred. Please try again.')),
+      );
+    }
+  }
+
+
+
+
 }

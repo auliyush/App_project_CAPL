@@ -2,24 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/bottom_nav.dart';
 import 'SignUp.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
    LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final apiUrl = "http://localhost:8080/capl/user/signIn";
   final Uri _urlFB = Uri.parse("https://www.facebook.com/login/");
-   final Uri _urlGoogle = Uri.parse("https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faccounts.google.com%2F&followup=https%3A%2F%2Faccounts.google.com%2F&ifkv=Ab5oB3rLC82jZdK_Rn9ZIGx-Y0m6xw-E3pasF0vtI1ZmtvWmEVG1RQ82oqfe7teAXkQvmV7FiF0Ibw&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S287277681%3A1723466158471857&ddm=0");
+
+  final Uri _urlGoogle = Uri.parse(
+      "https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faccounts.google.com%2F&followup=https%3A%2F%2Faccounts.google.com%2F&ifkv=Ab5oB3rLC82jZdK_Rn9ZIGx-Y0m6xw-E3pasF0vtI1ZmtvWmEVG1RQ82oqfe7teAXkQvmV7FiF0Ibw&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S287277681%3A1723466158471857&ddm=0");
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/login_back.jpg'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.darken),
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.7), BlendMode.darken),
           ),
         ),
         child: Padding(
@@ -54,12 +66,19 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 40),
                       SizedBox(
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
-                        child: TextField(
-                          controller: emailController,
+                        child: TextFormField(
+                          validator: (value) {
+                            if(value == null) {
+                              return "please Enter your Phone";
+                            } return null;
+                          },
+                          controller: phoneController,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.account_circle, color: Colors.white), // Email icon used here
-                            hintText: 'Email / Phone',
+                            prefixIcon: const Icon(
+                                Icons.account_circle, color: Colors.white),
+                            // Email icon used here
+                            hintText: 'Phone',
                             hintStyle: const TextStyle(color: Colors.grey),
                             fillColor: Colors.white.withOpacity(0.1),
                             filled: true,
@@ -73,11 +92,17 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       SizedBox(
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value) {
+                            if(value == null) {
+                              return "Enter Your Password";
+                            } return null;
+                          },
                           controller: passwordController,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                            prefixIcon: const Icon(
+                                Icons.lock, color: Colors.white),
                             hintText: 'Password',
                             hintStyle: const TextStyle(color: Colors.grey),
                             fillColor: Colors.white.withOpacity(0.1),
@@ -95,12 +120,7 @@ class LoginScreen extends StatelessWidget {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Pages(),
-                              ),
-                            );
+                            signInRequest();
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -110,7 +130,9 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            style: TextStyle(fontSize: 18 , fontWeight: FontWeight.bold , color: Colors.white70),
+                            style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white70),
                             'Login',
                           ),
                         ),
@@ -144,9 +166,10 @@ class LoginScreen extends StatelessWidget {
                                 icon: SizedBox(
                                   width: 24,
                                   height: 24,
-                                  child: Image.asset('assets/images/google.png'),
+                                  child: Image.asset(
+                                      'assets/images/google.png'),
                                 ),
-                                onPressed:() {
+                                onPressed: () {
                                   launchUrl(_urlGoogle);
                                 }
                             ),
@@ -154,7 +177,8 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(
                             width: screenWidth * 0.15,
                             child: IconButton(
-                              icon: Icon(Icons.facebook, color: Colors.blue,size: 30,),
+                              icon: Icon(
+                                Icons.facebook, color: Colors.blue, size: 30,),
                               onPressed: () {
                                 launchUrl(_urlFB);
                               },
@@ -171,5 +195,43 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> signInRequest() async {
+    try {
+      final uri = Uri.parse(apiUrl).replace(queryParameters: {
+        'userPhone': phoneController.text,
+        'userPassword': passwordController.text,
+      });
+      final response = await http.post(uri);
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        if (jsonData) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Authentication failed')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Server error: ${response.statusCode}')),
+        );
+      }
+    } on http.ClientException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Network error: $e')),
+      );
+    } on FormatException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid response from server')),
+      );
+    } catch (e) {
+      print('Unknown Error: $e'); // log the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An unknown error occurred. Please try again.')),
+      );
+    }
   }
 }

@@ -6,12 +6,12 @@ import 'package:merge_capl/teams/team_screen.dart';
 
 import '../home.dart';
 
-class Pages extends StatefulWidget {
+class BottomNav extends StatefulWidget {
   @override
-  _PagesState createState() => _PagesState();
+  _BottomNavState createState() => _BottomNavState();
 }
 
-class _PagesState extends State<Pages> {
+class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
   final List<Widget> _tabs = [
     MyHomePage(),
@@ -39,10 +39,10 @@ class _PagesState extends State<Pages> {
       body: _tabs[_currentIndex],
       bottomNavigationBar: SafeArea(
         child: BottomAppBar(
+          color: Colors.blue.shade100,
           child: LayoutBuilder(
             builder: (context, constraints) {
               double fabSize = 50;
-              double bottomAppBarHeight = kBottomNavigationBarHeight;
               double spaceForFab = fabSize * 1.2;
 
               return Row(
