@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/bottom_nav.dart';
+import 'package:merge_capl/api/sign_up_in.dart';
 import 'SignUp.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final apiUrl = "http://localhost:8080/capl/user/signIn";
   final Uri _urlFB = Uri.parse("https://www.facebook.com/login/");
 
   final Uri _urlGoogle = Uri.parse(
@@ -120,7 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: ElevatedButton(
                           onPressed: () {
-                            signInRequest();
+                            ApiService obj = ApiService();
+                          obj.signInRequest(phoneController.text, passwordController.text, context);
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -197,41 +198,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> signInRequest() async {
-    try {
-      final uri = Uri.parse(apiUrl).replace(queryParameters: {
-        'userPhone': phoneController.text,
-        'userPassword': passwordController.text,
-      });
-      final response = await http.post(uri);
 
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Authentication failed')),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Server error: ${response.statusCode}')),
-        );
-      }
-    } on http.ClientException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Network error: $e')),
-      );
-    } on FormatException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid response from server')),
-      );
-    } catch (e) {
-      print('Unknown Error: $e'); // log the error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An unknown error occurred. Please try again.')),
-      );
-    }
-  }
 }

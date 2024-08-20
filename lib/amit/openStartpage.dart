@@ -852,7 +852,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 11),
+              SizedBox(height: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -876,7 +876,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 6),
+              SizedBox(height: 5),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
@@ -892,7 +892,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               isNoBall = false; // Only one can be true at a time
                             });
                           }),
-                      Text('Wide'),
+                      Text('Wide',style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
@@ -906,7 +906,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               isWide = false; // Only one can be true at a time
                             });
                           }),
-                      Text('No Ball'),
+                      Text('No Ball',style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
@@ -919,7 +919,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               isByes = val ?? false;
                             });
                           }),
-                      Text('Byes'),
+                      Text('Byes',style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
@@ -932,7 +932,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               isLegByes = val ?? false;
                             });
                           }),
-                      Text('Leg Byes'),
+                      Text('Leg Byes',style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
@@ -948,29 +948,29 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               }
                             });
                           }),
-                      Text('Wicket'),
+                      Text('Wicket',style: TextStyle(fontSize: 12),),
                     ],
                   ),
-                  SizedBox(width: 8), // Add some spacing between elements
+                  SizedBox(width: 6), // Add some spacing between elements
                   ElevatedButton(
                     onPressed: retireBatsman,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange[900], // Background color
+                      backgroundColor: Color(0xFF3b3b6d), // Background color
                     ),
                     child: Text(
                       '      Retire      ',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white,fontSize: 12),
                     ),
                   ),
                   SizedBox(width: 8), // Add some spacing between elements
                   ElevatedButton(
                     onPressed: swapBatsman,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange[900], // Background color
+                      backgroundColor: Color(0xFF3b3b6d), // Background color
                     ),
                     child: Text(
                       'Swap Batsman',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white,fontSize: 12),
                     ),
                   ),
                 ],
@@ -990,35 +990,76 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                           ElevatedButton(
                             onPressed: undoLastAction,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[900], // Background color
+                              backgroundColor: const Color(0xFF3b3b6d), // Background color
+                              padding: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(context).size.height * 0.015,
+                                horizontal: MediaQuery.of(context).size.width * 0.04,
+                              ),
                             ),
-                            child: Text(
-                              '     Undo     ',
-                              style: TextStyle(color: Colors.white),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Adjust font size based on width constraint
+                                double fontSize = constraints.maxWidth * 0.05; // Adjust this factor as needed
+                                if (fontSize > 12) fontSize = 12; // Max font size to prevent it from being too large
+                                if (fontSize < 8) fontSize = 11; // Min font size to ensure readability
+
+                                return Text(
+                                  '      Undo      ',
+                                  style: TextStyle(color: Colors.white, fontSize: fontSize),
+                                );
+                              },
                             ),
                           ),
+
                           SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: _showPartnershipDialog,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[900], // Background color
+                              backgroundColor: const Color(0xFF3b3b6d), // Background color
+                              padding: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(context).size.height * 0.015,
+                                horizontal: MediaQuery.of(context).size.width * 0.04,
+                              ),
                             ),
-                            child: Text(
-                              'Partnership',
-                              style: TextStyle(color: Colors.white),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Adjust font size based on width constraint
+                                double fontSize = constraints.maxWidth * 0.05; // Adjust this factor as needed
+                                if (fontSize > 12) fontSize = 12; // Max font size to prevent it from being too large
+                                if (fontSize < 8) fontSize = 11; // Min font size to ensure readability
+
+                                return Text(
+                                  'Partnership',
+                                  style: TextStyle(color: Colors.white, fontSize: fontSize),
+                                );
+                              },
                             ),
                           ),
+
                           SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: _showExtrasDialog,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[900], // Background color
+                              backgroundColor: const Color(0xFF3b3b6d), // Background color
+                              padding: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(context).size.height * 0.015,
+                                horizontal: MediaQuery.of(context).size.width * 0.04,
+                              ),
                             ),
-                            child: Text(
-                              '     Extras   ',
-                              style: TextStyle(color: Colors.white),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Adjust font size based on width constraint
+                                double fontSize = constraints.maxWidth * 0.05; // Adjust this factor as needed
+                                if (fontSize > 12) fontSize = 12; // Max font size to prevent it from being too large
+                                if (fontSize < 8) fontSize = 11; // Min font size to ensure readability
+
+                                return Text(
+                                  '     Extras      ',
+                                  style: TextStyle(color: Colors.white, fontSize: fontSize),
+                                );
+                              },
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -1031,16 +1072,16 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                         double buttonHeight = buttonWidth * 1; // Adjust height relative to width, change as needed
 
                         return Container(
-                          padding: const EdgeInsets.all(8.0), // Optional padding for buttons
+                          padding: const EdgeInsets.all(5.0), // Optional padding for buttons
                           child: Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                            spacing: 1,
+                            runSpacing: 4,
                             alignment: WrapAlignment.center,
                             children: List.generate(7, (index) {
                               int buttonNumber = index; // Start from 0 instead of 1
                               return ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.orange.shade900, width: 1), // Border color and width
+                                  side: BorderSide(color: Color(0xFF3b3b6d), width: 1), // Border color and width
                                   minimumSize: Size(buttonWidth, buttonHeight), // Responsive size for buttons
                                 ),
                                 onPressed: () => updateScore(buttonNumber),
@@ -1051,7 +1092,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                               ..add(
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    side: BorderSide(color: Colors.orange.shade900, width: 2), // Border color and width
+                                    side: BorderSide(color: Color(0xFF3b3b6d), width: 2), // Border color and width
                                     minimumSize: Size(buttonWidth, buttonHeight), // Responsive size for buttons
                                   ),
                                   onPressed: _showPenaltyRunsDialog, // Open penalty runs dialog
