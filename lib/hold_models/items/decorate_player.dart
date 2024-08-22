@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'player_data.dart';
 
@@ -10,57 +12,74 @@ class DecoratePlayer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom:25),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 6,
-          enabledMouseCursor: MouseCursor.defer,
-          shadowColor: Colors.blue.shade900,
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          surfaceTintColor: Colors.white,
-          foregroundColor: Colors.grey,
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.blue.shade50, // changed to white
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: EdgeInsets.only(top: 16.0,bottom: 16,left: 0,right: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CircleAvatar(
-                radius: 25,
-                backgroundImage: AssetImage('${playerData.playerPhotoUrl}') ,
-              ),
-              SizedBox(width: 16.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${playerData.playerName}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      '${playerData.playerNickName}',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: MemoryImage(base64Decode(playerData.playerPhotoUrl)),
+                  fit: BoxFit.cover,
+                ),
+                border: Border.all(
+                  width: 3,
+                  color: Colors.black12,
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${playerData.playerName}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '${playerData.playerNickName}',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                onPressed: () {
+                  // todo navigate it to player profile
+                },
+              ),
+            ),
+          ],
         ),
-        onPressed: (){
-          // todo call here player detail page
-        },
       ),
     );
   }

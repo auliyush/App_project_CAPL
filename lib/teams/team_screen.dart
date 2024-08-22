@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../hold_models/items/decorate_team.dart';
-import '..//items/team_data.dart';
 import '../hold_models/player_list_model.dart';
 import 'create_team_screen.dart';
 
@@ -82,25 +81,20 @@ class _TeamScreenState extends State<TeamScreen> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(top: 8),
               width: double.infinity,
               decoration: BoxDecoration(
+                color: Colors.white24,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35),
                   topRight: Radius.circular(35),
                 ),
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.7), BlendMode.dstATop),
-                  image: AssetImage('assets/images/img.png'),
-                  fit: BoxFit.cover,
-                ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Consumer<ListModel>(
                   builder: (context, model, child) {
                     return ListView.builder(
-                      shrinkWrap: false, // changed to false
+                      shrinkWrap: false,
                       physics: ClampingScrollPhysics(),
                       itemCount: model.teams.length,
                       itemBuilder: (context, index) {

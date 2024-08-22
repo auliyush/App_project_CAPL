@@ -18,134 +18,156 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        title: Text('More'),
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/morebg.jpeg'),
-                  fit: BoxFit.cover, // <--- Fit the image to cover the entire widget
+          Stack(
+            children: [
+              Container(
+                height: 130,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/bg.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white70,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    surfaceTintColor: Colors.white,
-                    foregroundColor: Colors.grey,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.02, vertical: screenHeight * 0.02),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AccountPage(
-                                playerPhotoUrl: 'assets/images/profile.webp',
-                                playerName: 'Rahul',
-                                playerMobNumber: '74638900034',
-                                playerEmail: 'playerEmail',
-                                playerGender: 'Male')));
+                    Navigator.pop(context);
                   },
-                  child: _card_builder('Account'),
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white70,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    surfaceTintColor: Colors.white,
-                    foregroundColor: Colors.grey,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 18, top: 80),
+                child: Text(
+                  "More",
+                  style: TextStyle(
+                    fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44, // adjust font size based on screen width
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ResultScreen()));
-                  },
-                  child: _card_builder('Results'),
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white70,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    surfaceTintColor: Colors.white,
-                    foregroundColor: Colors.grey,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AboutUsScreen()));
-                  },
-                  child: _card_builder('About Us'),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white70,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    surfaceTintColor: Colors.white,
-                    foregroundColor: Colors.grey,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FeedBackScreen()));
-                  },
-                  child: _card_builder('FeedBack'),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white70,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    surfaceTintColor: Colors.white,
-                    foregroundColor: Colors.grey,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Tournament()));
-                  },
-                  child: _card_builder('Tournament'),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
+
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white70,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        surfaceTintColor: Colors.white,
+                        foregroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AccountPage(
+                                    playerPhotoUrl: 'assets/images/profile.webp',
+                                    playerName: 'Rahul',
+                                    playerMobNumber: '74638900034',
+                                    playerEmail: 'playerEmail',
+                                    playerGender: 'Male')));
+                      },
+                      child: _card_builder('Account'),
+                    ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white70,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        surfaceTintColor: Colors.white,
+                        foregroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultScreen()));
+                      },
+                      child: _card_builder('Results'),
+                    ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white70,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        surfaceTintColor: Colors.white,
+                        foregroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AboutUsScreen()));
+                      },
+                      child: _card_builder('About Us'),
+                    ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white70,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        surfaceTintColor: Colors.white,
+                        foregroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FeedBackScreen()));
+                      },
+                      child: _card_builder('FeedBack'),
+                    ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white70,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        surfaceTintColor: Colors.white,
+                        foregroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Tournament()));
+                      },
+                      child: _card_builder('Tournament'),
+                    ),
+                  ],
+                ),
+              ),
+
         ],
-      ),
+      )
+
+
+
     );
   }
 

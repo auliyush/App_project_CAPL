@@ -63,7 +63,6 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                         margin: EdgeInsets.only(top: 0),
                         child: TextField(
                           style: TextStyle(
-                            color: Colors.white70,
                           ),
                           maxLines: 12,
                           decoration: InputDecoration(

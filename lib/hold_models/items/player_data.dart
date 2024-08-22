@@ -1,6 +1,6 @@
 
 class PlayerData {
-  String? playerPhotoUrl;
+  String playerPhotoUrl;
   String? playerName;
   String? playerNickName;
 

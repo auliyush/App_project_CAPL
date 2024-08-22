@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +22,9 @@ class _BowlerScreenState extends State<BowlerScreen> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
 
+  String imagePath = "";
+  String? base64String;
+
   XFile? imageFile;
   final ImagePicker imagePicker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
@@ -27,9 +32,19 @@ class _BowlerScreenState extends State<BowlerScreen> {
 
   void takePhoto(ImageSource source) async {
     final pickedFile = await imagePicker.pickImage(source: source);
-    setState(() {
-      imageFile = pickedFile;
-    });
+    if (pickedFile != null) {
+      imagePath = pickedFile.path;
+
+      File file = File(imagePath);
+      Uint8List imageBytes = await file.readAsBytes();
+      base64String = base64.encode(imageBytes);
+
+      setState(() {
+        imageFile = pickedFile;
+      });
+    } else {
+      print('No image selected');
+    }
   }
 
   @override
@@ -95,7 +110,10 @@ class _BowlerScreenState extends State<BowlerScreen> {
                               radius: 60,
                               backgroundImage: imageFile == null
                                   ? AssetImage("assets/images/default.jpg")
-                                  : FileImage(File(imageFile!.path)) as ImageProvider,
+                                  : base64String != null
+                                  ? MemoryImage(base64Decode(base64String!))
+                              as ImageProvider
+                                  : AssetImage("assets/images/default.jpg"),
                             ),
                             Positioned(
                               bottom: 10,
@@ -365,7 +383,7 @@ class _BowlerScreenState extends State<BowlerScreen> {
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       final playerList = PlayerData(
-                                          playerPhotoUrl: "assets/images/default.jpg",
+                                          playerPhotoUrl: base64String!,
                                           playerName: _nameController.text,
                                           playerNickName: _nicknameController.text
                                       );

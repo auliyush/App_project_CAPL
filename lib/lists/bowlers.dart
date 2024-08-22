@@ -48,12 +48,15 @@ class _BowlersState extends State<Bowlers> {
       body: SingleChildScrollView(
         child: Consumer<ListModel>(
           builder: (context, model, child) {
-            return Column(
-              children: [
-                for (PlayerData players
-                    in model.getTeamBowlers(widget.teamData.teamId))
-                  DecoratePlayer(playerData: players)
-              ],
+            return Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  for (PlayerData players
+                      in model.getTeamBowlers(widget.teamData.teamId))
+                    DecoratePlayer(playerData: players)
+                ],
+              ),
             );
           },
         ),

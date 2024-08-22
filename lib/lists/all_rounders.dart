@@ -48,12 +48,15 @@ class _AllRoundersState extends State<AllRounders> {
       body: SingleChildScrollView(
         child: Consumer<ListModel>(
           builder: (context, model, child) {
-            return Column(
-              children: [
-                for (PlayerData player
-                in model.getTeamAllRounders(widget.teamData.teamId))
-                  DecoratePlayer(playerData: player)
-              ],
+            return Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  for (PlayerData player
+                  in model.getTeamAllRounders(widget.teamData.teamId))
+                    DecoratePlayer(playerData: player)
+                ],
+              ),
             );
           },
         ),

@@ -8,7 +8,7 @@ import '../hold_models/items/team_data.dart';
 
 class ApiService {
   static const loginUrl = "http://localhost:8080/capl/user/signIn";
-  static String loggedUserId = "";
+   String loggedUserId = "";
   final createTeamUrl = "http://localhost:8080/capl/team/create/Team";
   static const getApiUrl = "http://localhost:8080/capl/user/logged/in/user/Id";
 
@@ -44,7 +44,7 @@ class ApiService {
         SnackBar(content: Text('Invalid response from server')),
       );
     } catch (e) {
-      print('Unknown Error: $e'); // log the error
+      print('Unknown Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An unknown error occurred. Please try again.')),
       );
@@ -79,7 +79,7 @@ class ApiService {
     }
   }
 
-  Future<void> postApiCreateTeam(String teamName, String teamNickName, BuildContext context) async {
+  Future<void> postApiCreateTeam(String teamName, String teamNickName, String base64String, BuildContext context) async {
     try {
       final response = await http.post(Uri.parse(createTeamUrl),
           headers: {
@@ -96,7 +96,7 @@ class ApiService {
         final teamId = Uuid().v4();
         final teamItem = TeamData(
           teamId: teamId,
-          teamProfileUrl: "assets/images/default.jpg",
+          teamProfileUrl: base64String,
           teamName: teamName,
           teamNickName: teamNickName,
           batters: [],

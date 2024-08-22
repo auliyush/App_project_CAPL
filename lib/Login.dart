@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/bottom_nav.dart';
-import 'package:merge_capl/api/sign_up_in.dart';
 import 'SignUp.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -120,8 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: ElevatedButton(
                           onPressed: () {
-                            ApiService obj = ApiService();
-                          obj.signInRequest(phoneController.text, passwordController.text, context);
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
+                          //   ApiService obj = ApiService();
+                          // obj.signInRequest(phoneController.text, passwordController.text, context);
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15),

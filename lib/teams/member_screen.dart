@@ -40,7 +40,7 @@ class _MemberScreenState extends State<MemberScreen> {
             Stack(
               children: [
                 Container(
-                  height: 130, // Fixed height
+                  height: 130,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -65,7 +65,7 @@ class _MemberScreenState extends State<MemberScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 18, top: 80),
                   child: Text(
-                    "Create Your Team",
+                    "Add-Member-In-Team",
                     style: TextStyle(
                       fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44,
                       color: Colors.white,

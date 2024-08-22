@@ -6,16 +6,16 @@ class TeamData {
   String teamNickName;
   String teamProfileUrl;
   List<PlayerData> batters;
-  List<PlayerData> bowlers;// Add this
-  List<PlayerData> allRounders;// Add this
+  List<PlayerData> bowlers;
+  List<PlayerData> allRounders;
 
   TeamData({
     required this.teamId,
     required this.teamName,
     required this.teamNickName,
     required this.teamProfileUrl,
-    this.batters = const [], // Initialize with an empty list
-    this.bowlers = const [], // Initialize with an empty list
-    this.allRounders = const [], // Initialize with an empty list
+    this.batters = const [],
+    this.bowlers = const [],
+    this.allRounders = const [],
   });
 }
