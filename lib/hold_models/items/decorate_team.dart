@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:merge_capl/hold_models/items/team_data.dart';
 
@@ -10,15 +12,14 @@ class DecorateTeam extends StatelessWidget {
     super.key,
     required this.teamData,
   });
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 25),
+      padding: const EdgeInsets.only(bottom: 30),
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.blueGrey[50],
+          color: Colors.blue.shade50, // changed to white
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
@@ -38,12 +39,12 @@ class DecorateTeam extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage('${teamData.teamProfileUrl}'),
+                  image: MemoryImage(base64Decode(teamData.teamProfileUrl)),
                   fit: BoxFit.cover,
                 ),
                 border: Border.all(
-                  width: 2,
-                  color: Colors.grey,
+                  width: 3,
+                  color: Colors.black12,
                 ),
               ),
             ),
@@ -74,7 +75,7 @@ class DecorateTeam extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 15),
               child: IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
+                icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => MemberScreen(teamData: teamData)));
                 },
