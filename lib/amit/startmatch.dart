@@ -12,6 +12,7 @@ class SelectOpeningPlayersPage extends StatefulWidget {
 }
 
 class _SelectOpeningPlayersPageState extends State<SelectOpeningPlayersPage> {
+
   final TextEditingController strikerController = TextEditingController();
   final TextEditingController nonStrikerController = TextEditingController();
   final TextEditingController openingBowlerController = TextEditingController();
@@ -21,7 +22,6 @@ class _SelectOpeningPlayersPageState extends State<SelectOpeningPlayersPage> {
     if (strikerController.text.isEmpty ||
         nonStrikerController.text.isEmpty ||
         openingBowlerController.text.isEmpty) {
-      // Show an alert dialog if any field is empty
       showDialog(
         context: context,
         builder: (context) {
@@ -53,11 +53,13 @@ class _SelectOpeningPlayersPageState extends State<SelectOpeningPlayersPage> {
       );
     }
   }
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -108,7 +110,7 @@ class _SelectOpeningPlayersPageState extends State<SelectOpeningPlayersPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -117,76 +119,144 @@ class _SelectOpeningPlayersPageState extends State<SelectOpeningPlayersPage> {
                       decoration: InputDecoration(
                         labelText: 'Striker',
                         labelStyle: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 0.5, // add some letter spacing for a more modern look
                         ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 10.0),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                          vertical: 15.0,
+                          horizontal: 15.0,
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4, // add some gap padding to make the border more rounded
                         ),
-                      ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        hoverColor: Colors.grey.shade100, // add a hover color to give a subtle effect
+                      )
                     ),
-                    SizedBox(height: 16.0),
+                    SizedBox(height: 20),
                     TextField(
                       controller: nonStrikerController,
                       decoration: InputDecoration(
-                        labelText: 'Non-striker',
+                        labelText: 'Non-Striker',
                         labelStyle: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 0.5,
                         ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 10.0),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                          vertical: 15.0,
+                          horizontal: 15.0,
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4,
                         ),
-                      ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        hoverColor: Colors.grey.shade100,
+                      )
                     ),
-                    SizedBox(height: 16.0),
+                    SizedBox(height:20),
                     TextField(
                       controller: openingBowlerController,
                       decoration: InputDecoration(
-                        labelText: 'Opening bowler',
+                        labelText: 'Opening-Bowler',
                         labelStyle: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 0.5,
                         ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 10.0),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                          vertical: 15.0,
+                          horizontal: 15.0,
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          gapPadding: 4,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        hoverColor: Colors.grey.shade100,
+                      )
+                    ),
+                    SizedBox(height: 30),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click, // Change the cursor to a click cursor on hover
+                      child: SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _validateAndProceed,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF3b3b6d), // Button background color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10), // Add rounded corners
+                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 20,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Start Match',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18, // Increase font size
+                                fontWeight: FontWeight.bold, // Make the text bold
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    SizedBox(
-                      height: 50,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _validateAndProceed,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          Colors.orange[900], // Button background color
-                        ),
-                        child: Center(
-                          child: Text('Start Match',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    ),
+
+                    )
                   ],
                 ),
               ),

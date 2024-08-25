@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/amit/startmatch.dart';
 
+import '../Login.dart';
+
 class CreateMatch extends StatefulWidget {
   @override
   _CreateMatchState createState() => _CreateMatchState();
@@ -98,7 +100,8 @@ class _CreateMatchState extends State<CreateMatch> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+
                         },
                       ),
                     ),

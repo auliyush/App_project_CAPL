@@ -76,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(
                                 Icons.account_circle, color: Colors.white),
-                            // Email icon used here
                             hintText: 'Phone',
                             hintStyle: const TextStyle(color: Colors.grey),
                             fillColor: Colors.white.withOpacity(0.1),

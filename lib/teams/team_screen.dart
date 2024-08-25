@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:merge_capl/Login.dart';
 import 'package:provider/provider.dart';
 
 import '../hold_models/items/decorate_team.dart';
@@ -34,7 +35,7 @@ class _TeamScreenState extends State<TeamScreen> {
             color: Colors.white,
             size: 30,
           ),
-          backgroundColor: Colors.blue.shade800,
+          backgroundColor: Color(0xFF3b3b6d),
         ),
       ),
       body: Column(
@@ -61,7 +62,7 @@ class _TeamScreenState extends State<TeamScreen> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                     },
                   ),
                 ),
