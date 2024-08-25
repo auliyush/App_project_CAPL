@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:typed_data';
+import 'dart:convert';
+
+// import 'dart:html' as html; // For web-specific file handling
+
 import 'package:uuid/uuid.dart';
 import '../hold_models/items/team_data.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class CreateTeamScreen extends StatefulWidget {
   @override
@@ -19,33 +22,68 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
   final _teamNicknameController = TextEditingController();
 
   XFile? imageFile;
+
   final ImagePicker imagePicker = ImagePicker();
 
   String imagePath = "";
   String? base64String;
 
+  // 11:47 --- 79
+
   final _formKey = GlobalKey<FormState>();
 
-  void takePhoto(ImageSource source) async {
-    final pickedFile = await imagePicker.pickImage(source: source);
+  void takePhoto(ImageSource imageSource) async {
+    // if (kIsWeb) {
+    //   // Web-specific code to pick image
+    //   html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    //   uploadInput.accept = 'image/*';
+    //   uploadInput.click();
+    //
+    //   uploadInput.onChange.listen((e) async {
+    //     final files = uploadInput.files;
+    //     if (files != null && files.isNotEmpty) {
+    //       final html.File mediaFile = files.first;
+    //       final reader = html.FileReader();
+    //       reader.readAsArrayBuffer(mediaFile);
+    //
+    //       reader.onLoadEnd.listen((_) async {
+    //         Uint8List imageBytes = reader.result as Uint8List;
+    //         String base64String = base64.encode(imageBytes);
+    //
+    //         print(base64String); // print first 100 characters
+    //
+    //         setState(() {
+    //           // Convert to a suitable type if needed for image display
+    //           imageFile = mediaFile as XFile?;
+    //         });
+    //       });
+    //     } else {
+    //       print('No image selected');
+    //     }
+    //   });
+    // }
+    // else {
+    // Non-web (mobile, desktop) specific code
+    final pickedFile = await ImagePicker().pickImage(source: imageSource);
     if (pickedFile != null) {
-      imagePath = pickedFile.path;
-
-      File file = File(imagePath);
+      File file = File(pickedFile.path);
 
       // Read the image file as bytes
       Uint8List imageBytes = await file.readAsBytes();
 
       // Convert the image bytes to Base64 string
-      base64String = base64.encode(imageBytes);
+      String base64String = base64.encode(imageBytes);
+
+      print(base64String);
 
       setState(() {
         imageFile = pickedFile;
       });
     } else {
-      // handle the case where pickedFile is null
       print('No image selected');
     }
+    // }
+    // }
   }
 
 
@@ -88,7 +126,6 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                       "Create Your Team",
                       style: TextStyle(
                         fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44,
-                        // adjust font size based on screen width
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -102,7 +139,6 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                   margin: EdgeInsets.only(top: 40),
                   child: Column(
                     children: [
-
                       Center(
                         child: Container(
                           height: 120,

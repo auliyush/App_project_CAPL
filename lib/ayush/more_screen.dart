@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merge_capl/Login.dart';
 import 'package:merge_capl/ayush/results_screen.dart';
 
 import '../tournament.dart';
@@ -43,7 +44,7 @@ class _MorePageState extends State<MorePage> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                 ),
               ),
