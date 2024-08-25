@@ -39,6 +39,7 @@ dependencies:
   http: ^0.13.3
   share_plus: ^6.0.0
   image_picker_web: ^4.0.0
+  multi_select_flutter: ^4.1.0
 
 
 

@@ -264,32 +264,108 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
     );
   }
 
+  void recordCurrentState1() {
+    // Record all necessary state variables to their respective history lists
+    scoreHistory.add(score);
+    ballsHistory.add(balls);
+    wicketsHistory.add(wickets);
 
-  //undo action
+    batsman1RunsHistory.add(batsman1Runs);
+    batsman1BallsHistory.add(batsman1Balls);
+    batsman1FoursHistory.add(batsman1Fours);
+    batsman1SixesHistory.add(batsman1Sixes);
+
+    batsman2RunsHistory.add(batsman2Runs);
+    batsman2BallsHistory.add(batsman2Balls);
+    batsman2FoursHistory.add(batsman2Fours);
+    batsman2SixesHistory.add(batsman2Sixes);
+  }
+
+  bool hasActionPerformed = false;
+
+  void performSomeAction() {
+    recordCurrentState1();
+    score += 1;             // Update the score
+    balls += 1;             // Update the number of balls
+
+    setState(() {
+      hasActionPerformed = true;  // Mark the action as performed
+    });
+  }
+
   void undoLastAction() {
-    if (scoreHistory.isNotEmpty && ballsHistory.isNotEmpty && wicketsHistory.isNotEmpty) {
-      setState(() {
-        score = scoreHistory.removeLast();
-        balls = ballsHistory.removeLast();
-        wickets = wicketsHistory.removeLast();
+    if (scoreHistory.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Confirm Undo"),
+            content: Text("Are you sure you want to undo the last action?"),
+            actions: [
+              TextButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+              ),
+              TextButton(
+                child: Text("Undo"),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
 
-        batsman1Runs = batsman1RunsHistory.removeLast();
-        batsman1Balls = batsman1BallsHistory.removeLast();
-        batsman1Fours = batsman1FoursHistory.removeLast();
-        batsman1Sixes = batsman1SixesHistory.removeLast();
+                  setState(() {
+                    // Restore the previous state from history (undo the last ball)
+                    score = scoreHistory.removeLast();
+                    balls = ballsHistory.removeLast();
+                    wickets = wicketsHistory.removeLast();
 
-        batsman2Runs = batsman2RunsHistory.removeLast();
-        batsman2Balls = batsman2BallsHistory.removeLast();
-        batsman2Fours = batsman2FoursHistory.removeLast();
-        batsman2Sixes = batsman2SixesHistory.removeLast();
+                    batsman1Runs = batsman1RunsHistory.removeLast();
+                    batsman1Balls = batsman1BallsHistory.removeLast();
+                    batsman1Fours = batsman1FoursHistory.removeLast();
+                    batsman1Sixes = batsman1SixesHistory.removeLast();
 
-        if (currentOverRuns.isNotEmpty) {
-          currentOverRuns.removeLast(); // Remove last run from this over
-        }
-        crr = balls > 0 ? (score / balls) * 6 : 0.0;
-      });
+                    batsman2Runs = batsman2RunsHistory.removeLast();
+                    batsman2Balls = batsman2BallsHistory.removeLast();
+                    batsman2Fours = batsman2FoursHistory.removeLast();
+                    batsman2Sixes = batsman2SixesHistory.removeLast();
+
+                    if (currentOverRuns.isNotEmpty) {
+                      currentOverRuns.removeLast();
+                    }
+
+                    crr = balls > 0 ? (score / (balls / 6)) : 0.0;
+
+                    // Clear the history to prevent undoing further
+                    scoreHistory.clear();
+                    ballsHistory.clear();
+                    wicketsHistory.clear();
+
+                    batsman1RunsHistory.clear();
+                    batsman1BallsHistory.clear();
+                    batsman1FoursHistory.clear();
+                    batsman1SixesHistory.clear();
+
+                    batsman2RunsHistory.clear();
+                    batsman2BallsHistory.clear();
+                    batsman2FoursHistory.clear();
+                    batsman2SixesHistory.clear();
+
+                    hasActionPerformed = false;  // Allow a new action to be performed
+                  });
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No actions to undo.")),
+      );
     }
   }
+
+
 
 
   void retireBatsman() {
@@ -536,17 +612,6 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                 ],
               ),
               SizedBox(height: 16),
-              // ElevatedButton(
-              //   onPressed: undoLastExtras,
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.green, // Background color
-              //   ),
-              //   child: Text(
-              //     '     Extras       ',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-
             ],
           ),
         );
