@@ -21,13 +21,11 @@ class _CreateMatchState extends State<CreateMatch> {
 
   final _formKey = GlobalKey<FormState>();
 
-  // Add your new method here
   void _validateAndProceed() {
     if (hostController.text.isEmpty ||
         visitorController.text.isEmpty ||
         tossWinnerController.text.isEmpty ||
         selectedByTossWinner.text.isEmpty) {
-      // Show an alert dialog if any field is empty
       showDialog(
         context: context,
         builder: (context) {
@@ -46,7 +44,6 @@ class _CreateMatchState extends State<CreateMatch> {
         },
       );
     } else {
-      // Navigate to the next page if all fields are filled
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -66,7 +63,6 @@ class _CreateMatchState extends State<CreateMatch> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtain screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -99,10 +95,7 @@ class _CreateMatchState extends State<CreateMatch> {
                           Icons.arrow_back_ios_new,
                           color: Colors.white,
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ),
@@ -131,10 +124,22 @@ class _CreateMatchState extends State<CreateMatch> {
                           fontWeight: FontWeight.bold,
                           color: Colors.green),
                     ),
+                    SizedBox(height: 10),
                     TextFormField(
                       controller: hostController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Host Team',
+                        labelStyle: TextStyle(color: Colors.green),
+                        filled: true,
+                        fillColor: Colors.green.withOpacity(0.1),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.green, width: 2),
+                        ),
+                        prefixIcon: Icon(Icons.home, color: Colors.green),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -143,10 +148,22 @@ class _CreateMatchState extends State<CreateMatch> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 20),
                     TextFormField(
                       controller: visitorController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Visitor Team',
+                        labelStyle: TextStyle(color: Colors.blue),
+                        filled: true,
+                        fillColor: Colors.blue.withOpacity(0.1),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                        ),
+                        prefixIcon: Icon(Icons.group, color: Colors.blue),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -155,7 +172,7 @@ class _CreateMatchState extends State<CreateMatch> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     const Text(
                       'Toss won by?',
                       style: TextStyle(
@@ -282,13 +299,18 @@ class _CreateMatchState extends State<CreateMatch> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: Color(0xFF3b3b6d),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 5,
+                              padding: EdgeInsets.symmetric(vertical: 15),
                             ),
                             child: Text(
                               matchDate != null
                                   ? '${matchDate!.day}/${matchDate!.month}/${matchDate!.year}'
                                   : 'Select Date',
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           ),
                         ),
@@ -307,13 +329,18 @@ class _CreateMatchState extends State<CreateMatch> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: Color(0xFF3b3b6d),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 5,
+                              padding: EdgeInsets.symmetric(vertical: 15),
                             ),
                             child: Text(
                               matchTime != null
                                   ? '${matchTime!.format(context)}'
                                   : 'Select Time',
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           ),
                         ),
@@ -326,12 +353,16 @@ class _CreateMatchState extends State<CreateMatch> {
                         ElevatedButton(
                           onPressed: _validateAndProceed,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange[900],
+                            backgroundColor: Color(0xFF3b3b6d),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Start match',
-                            style:
-                            TextStyle(fontSize: 20, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],

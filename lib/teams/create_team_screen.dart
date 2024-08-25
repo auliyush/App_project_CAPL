@@ -7,7 +7,6 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
-// import 'dart:html' as html; // For web-specific file handling
 
 import 'package:uuid/uuid.dart';
 import '../hold_models/items/team_data.dart';
