@@ -218,7 +218,7 @@ class _SeasonSelectorState extends State<SeasonSelector> {
               backgroundColor: Colors.blue.shade900,
               elevation: 15,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0), // remove the border radius
+                borderRadius: BorderRadius.circular(10),
               ),
               padding: EdgeInsets.symmetric(vertical: 18, horizontal: 40),
               shadowColor: Colors.blue.shade900,

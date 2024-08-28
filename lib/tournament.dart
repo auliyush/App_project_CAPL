@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merge_capl/teams/create_team_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -21,7 +20,7 @@ class _TournamentState extends State<Tournament> {
   DateTime? _tournamentDate;
   TimeOfDay? _tournamentTime;
 
-  List<String> _teams = ['Team A', 'Team B', 'Team C'];
+  List<String> _teams = ['Team 1', 'Team 2', 'Team 3' , 'Team 4', 'Team 5', 'Team 6' , 'Team 7', 'Team 8', 'Team 9' , ];
   List<String> _selectedTeams = [];
 
   @override
@@ -63,14 +62,14 @@ class _TournamentState extends State<Tournament> {
   InputDecoration _inputDecoration(String labelText) {
     return InputDecoration(
       labelText: labelText,
-      labelStyle: TextStyle(color: Colors.grey),
+      labelStyle: const TextStyle(color: Colors.grey),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
       ),
     );
   }
@@ -134,22 +133,23 @@ class _TournamentState extends State<Tournament> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const SizedBox(height: 20),
+                    _buildTextField(_adminNameController, 'Admin Name *'),
+                    const SizedBox(height: 20),
                     _buildTextField(_tournamentNameController, 'Tournament / Series Name *'),
                     const SizedBox(height: 20),
                     _buildTextField(_stadiumNameController, 'Stadium Name *'),
                     const SizedBox(height: 20),
                     _buildTextField(_stadiumAddressController, 'Stadium Address *'),
                     const SizedBox(height: 20),
-                    _buildTextField(_adminNameController, 'Admin Name *'),
-                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
+                        Container(
+                          width: 140,
                           child: TextFormField(
                             controller: _numberOfTeamsController,
                             keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('Number of Teams *'),
+                            decoration: _inputDecoration('No. of Teams *'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter the number of teams';
@@ -161,8 +161,9 @@ class _TournamentState extends State<Tournament> {
                             },
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Expanded(
+                        const SizedBox(width: 10),
+                        Container(
+                          height: 50,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -181,6 +182,7 @@ class _TournamentState extends State<Tournament> {
                         )
                       ],
                     ),
+
                     const SizedBox(height: 20),
                     MultiSelectDialogField(
                       items: _teams.map((team) => MultiSelectItem(team, team)).toList(),
@@ -240,7 +242,7 @@ class _TournamentState extends State<Tournament> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () => _selectTime(context),
@@ -259,7 +261,59 @@ class _TournamentState extends State<Tournament> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 30),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Transform(
+                        transform: Matrix4.skewX(-0.2),
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15 , right: 15),
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontFamily: "Netflix",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 22,
+                                letterSpacing: 0.2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade900,
+                            elevation: 15,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: isSmallScreen ? 14 : 18,
+                                horizontal: isSmallScreen ? 30 : 40),
+                            shadowColor: Colors.blue.shade900,
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (_selectedTeams.length != int.parse(_numberOfTeamsController.text)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Please select exactly ${_numberOfTeamsController.text} teams'),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Tournament(),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -280,7 +334,7 @@ class _TournamentState extends State<Tournament> {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),

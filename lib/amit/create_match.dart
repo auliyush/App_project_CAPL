@@ -20,7 +20,6 @@ class _CreateMatchState extends State<CreateMatch> {
   TimeOfDay? matchTime;
 
   final _formKey = GlobalKey<FormState>();
-
   void _validateAndProceed() {
     if (hostController.text.isEmpty ||
         visitorController.text.isEmpty ||

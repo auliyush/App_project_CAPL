@@ -31,58 +31,24 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void takePhoto(ImageSource imageSource) async {
-    // if (kIsWeb) {
-    //   // Web-specific code to pick image
-    //   html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-    //   uploadInput.accept = 'image/*';
-    //   uploadInput.click();
-    //
-    //   uploadInput.onChange.listen((e) async {
-    //     final files = uploadInput.files;
-    //     if (files != null && files.isNotEmpty) {
-    //       final html.File mediaFile = files.first;
-    //       final reader = html.FileReader();
-    //       reader.readAsArrayBuffer(mediaFile);
-    //
-    //       reader.onLoadEnd.listen((_) async {
-    //         Uint8List imageBytes = reader.result as Uint8List;
-    //         String base64String = base64.encode(imageBytes);
-    //
-    //         print(base64String); // print first 100 characters
-    //
-    //         setState(() {
-    //           // Convert to a suitable type if needed for image display
-    //           imageFile = mediaFile as XFile?;
-    //         });
-    //       });
-    //     } else {
-    //       print('No image selected');
-    //     }
-    //   });
-    // }
-    // else {
-    // Non-web (mobile, desktop) specific code
-    final pickedFile = await ImagePicker().pickImage(source: imageSource);
+  void takePhoto(ImageSource source) async {
+    final pickedFile = await imagePicker.pickImage(source: source);
     if (pickedFile != null) {
-      File file = File(pickedFile.path);
+      String imagePath = pickedFile.path;
 
-      // Read the image file as bytes
+      List<int> imageByte = File(pickedFile.path).readAsBytesSync();
+      base64String = base64Encode(imageByte);
+
+      File file = File(imagePath);
+
       Uint8List imageBytes = await file.readAsBytes();
 
-      // Convert the image bytes to Base64 string
-      String base64String = base64.encode(imageBytes);
-
-      print(base64String);
+      base64String = base64.encode(imageBytes);
 
       setState(() {
         imageFile = pickedFile;
       });
-    } else {
-      print('No image selected');
     }
-    // }
-    // }
   }
 
 
@@ -279,7 +245,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                       final teamId = Uuid().v4();
                                       final teamItem = TeamData(
                                         teamId: teamId,
-                                        teamProfileUrl: base64String!,
+                                        teamProfileUrl: "assets/images/default.jpg",
                                         teamName: _teamNameController.text,
                                         teamNickName: _teamNicknameController.text,
                                         batters: [],
