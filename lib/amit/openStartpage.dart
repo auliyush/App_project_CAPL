@@ -76,12 +76,12 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
   int penaltyRuns = 0;
 
 
-
-  bool isWide = false;
-  bool isNoBall = false;
-  bool isByes = false;
-  bool isLegByes = false;
-  bool isWicket = false;
+ bool _isSelected = false;
+  bool _isWide = false;
+  bool _isNoBall = false;
+  bool _isByes = false;
+  bool _isLegByes = false;
+  bool _isWicket = false;
 
   void updateScore(int run) {
     setState(() {
@@ -100,15 +100,15 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
       batsman2SixesHistory.add(batsman2Sixes);
 
       // Handle extras first
-      if (isWide || isNoBall || isByes || isLegByes) {
+      if (_isWide || _isNoBall || _isByes || _isLegByes) {
         int extraRuns = 0;
-        if (isWide) {
+        if (_isWide) {
           extraRuns = extraWides;
-        } else if (isNoBall) {
+        } else if (_isNoBall) {
           extraRuns = extraNoBalls;
-        } else if (isByes) {
+        } else if (_isByes) {
           extraRuns = extraByes;
-        } else if (isLegByes) {
+        } else if (_isLegByes) {
           extraRuns = extraLegByes;
         }
 
@@ -116,13 +116,13 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
         currentOverRuns.add({
           'run': extraRuns,
           'isBoundary': false,
-          'type': isWide ? 'W' : isNoBall ? 'NB' : isByes ? 'B' : 'LB',
+          'type': _isWide ? 'W' : _isNoBall ? 'NB' : _isByes ? 'B' : 'LB',
         });
 
-        isWide = false;
-        isNoBall = false;
-        isByes = false;
-        isLegByes = false;
+        _isWide = false;
+        _isNoBall = false;
+        _isByes = false;
+        _isLegByes = false;
       } else {
         score += run;
         balls++;
@@ -146,9 +146,9 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
       }
 
       // Reset extras flags
-      isByes = false;
-      isLegByes = false;
-      isWicket = false;
+      _isByes = false;
+      _isLegByes = false;
+      _isWicket = false;
 
       crr = balls > 0 ? (score / balls) * 6 : 0.0;
 
@@ -180,20 +180,23 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
 
   void addWicket() {
     setState(() {
-      scoreHistory.add(score);
-      ballsHistory.add(balls);
-      wicketsHistory.add(wickets);
+      // Record the current state before making changes
+      recordCurrentState1();
 
+      // Update state for wicket
       wickets++;
       balls++; // Increment balls count when a wicket occurs
-
       currentOverRuns.add({
         'run': 0,
         'isBoundary': false,
         'type': 'W', // Indicate it's a wicket
       });
 
-      _showNewBatsmanDialog(); // Prompt for new batsman's name
+      // Update overs if needed
+      updateOvers();
+
+      // Ensure the wicket is reflected in the UI
+      hasActionPerformed = true; // Mark that an action has been performed
     });
   }
   //add extras section in this code
@@ -560,10 +563,10 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
               Row(
                 children: [
                   Checkbox(
-                    value: isByes,
+                    value: _isByes,
                     onChanged: (val) {
                       setState(() {
-                        isByes = val ?? false;
+                        _isByes = val ?? false;
                       });
                     },
                   ),
@@ -573,10 +576,10 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
               Row(
                 children: [
                   Checkbox(
-                    value: isLegByes,
+                    value: _isLegByes,
                     onChanged: (val) {
                       setState(() {
-                        isLegByes = val ?? false;
+                        _isLegByes = val ?? false;
                       });
                     },
                   ),
@@ -586,11 +589,11 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
               Row(
                 children: [
                   Checkbox(
-                    value: isWide,
+                    value: _isWide,
                     onChanged: (val) {
                       setState(() {
-                        isWide = val ?? false;
-                        isNoBall = false; // Only one can be true at a time
+                        _isWide = val ?? false;
+                        _isNoBall = false; // Only one can be true at a time
                       });
                     },
                   ),
@@ -600,11 +603,11 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
               Row(
                 children: [
                   Checkbox(
-                    value: isNoBall,
+                    value: _isNoBall,
                     onChanged: (val) {
                       setState(() {
-                        isNoBall = val ?? false;
-                        isWide = false; // Only one can be true at a time
+                        _isNoBall = val ?? false;
+                        _isWide = false; // Only one can be true at a time
                       });
                     },
                   ),
@@ -659,9 +662,8 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
   }
 
 
-
-
-
+  final _formKey = GlobalKey<FormState>();
+  final jerseyController = TextEditingController();
   Future<void> _showNewBatsmanDialog() async {
     return showDialog<void>(
       context: context,
@@ -693,82 +695,155 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                   });
                 },
               ),
-              TextField(
-                onChanged: (value) {
-                  newBatsmanName = value;
-                },
-                decoration:
-                InputDecoration(hintText: 'Enter new batsman\'s name'),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildJerseyNumberField(),
+                    _buildBatsmanNameField(),
+                  ],
+                ),
               ),
             ],
           ),
           actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
+            ElevatedButton(
+              child: Text(
+                'Add',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () {
-                Navigator.of(context).pop();
+                if (_formKey.currentState!.validate()) {
+                  _addNewBatsman();
+                  _isWicket  = false;
+                }
               },
             ),
-            TextButton(
-              child: Text('Add'),
+
+            ElevatedButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () {
-                if (newBatsmanName.isNotEmpty) {
-                  setState(() {
-                    // Update partnership runs
-                    partnershipRuns += (currentStriker == batsman1)
-                        ? batsman1Runs
-                        : batsman2Runs;
 
-                    switch (selectedWicketType) {
-                      case 'LBW':
-                      case 'Stumping':
-                      case 'Run Out (Striker)':
-                      case 'Catch Out':
-                      case 'Wicket Stumping':
-                        if (currentStriker == batsman1) {
-                          batsman1 = newBatsmanName;
-                          batsman1Runs = 0;
-                          batsman1Balls = 0;
-                          batsman1Fours = 0;
-                          batsman1Sixes = 0;
-                        } else {
-                          batsman2 = newBatsmanName;
-                          batsman2Runs = 0;
-                          batsman2Balls = 0;
-                          batsman2Fours = 0;
-                          batsman2Sixes = 0;
-                        }
-                        currentStriker = newBatsmanName;
-                        break;
+                _isWicket  = false;
+                Navigator.pop(context);
 
-                      case 'Run Out (Non-Striker)':
-                        if (currentStriker == batsman1) {
-                          batsman2 = newBatsmanName;
-                          batsman2Runs = 0;
-                          batsman2Balls = 0;
-                          batsman2Fours = 0;
-                          batsman2Sixes = 0;
-                        } else {
-                          batsman1 = newBatsmanName;
-                          batsman1Runs = 0;
-                          batsman1Balls = 0;
-                          batsman1Fours = 0;
-                          batsman1Sixes = 0;
-                        }
-                        break;
-                    }
-
-                    // Reset partnership runs after a wicket
-                    partnershipRuns = 0;
-                  });
-                }
-                Navigator.of(context).pop();
               },
             ),
           ],
         );
       },
     );
+  }
+
+  // this is text-field of jersey
+  Widget _buildJerseyNumberField() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      controller: jerseyController,
+      validator: _validateJerseyNumber,
+      decoration: InputDecoration(
+        hintText: "Enter new player jersey number",
+        errorStyle: TextStyle(fontSize: 12),
+      ),
+    );
+  }
+
+  // this is text-field of add new batsman
+  Widget _buildBatsmanNameField() {
+    return TextFormField(
+      validator: _validateBatsmanName,
+      onChanged: (value) {
+        newBatsmanName = value;
+      },
+      decoration: InputDecoration(
+        hintText: 'Enter new batsman\'s name',
+        errorStyle: TextStyle(fontSize: 12),
+      ),
+    );
+  }
+
+  // both are validator
+  String? _validateBatsmanName(String? value) {
+    if (value == null || value.length < 4) {
+      return "Enter at least 4 characters";
+    }
+    return null;
+  }
+  String? _validateJerseyNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter a jersey number";
+    }
+    if (int.tryParse(value) == null) {
+      return "Please enter a valid number";
+    }
+    return null;
+  }
+
+  void _addNewBatsman() {
+    setState(() {
+      partnershipRuns += (currentStriker == batsman1)
+          ? batsman1Runs
+          : batsman2Runs;
+
+      switch (selectedWicketType) {
+        case 'LBW':
+        case 'Stumping':
+        case 'Run Out (Striker)':
+        case 'Catch Out':
+        case 'Wicket Stumping':
+          if (currentStriker == batsman1) {
+            batsman1 = newBatsmanName;
+            batsman1Runs = 0;
+            batsman1Balls = 0;
+            batsman1Fours = 0;
+            batsman1Sixes = 0;
+          } else {
+            batsman2 = newBatsmanName;
+            batsman2Runs = 0;
+            batsman2Balls = 0;
+            batsman2Fours = 0;
+            batsman2Sixes = 0;
+          }
+          currentStriker = newBatsmanName;
+          break;
+
+        case 'Run Out (Non-Striker)':
+          if (currentStriker == batsman1) {
+            batsman2 = newBatsmanName;
+            batsman2Runs = 0;
+            batsman2Balls = 0;
+            batsman2Fours = 0;
+            batsman2Sixes = 0;
+          } else {
+            batsman1 = newBatsmanName;
+            batsman1Runs = 0;
+            batsman1Balls = 0;
+            batsman1Fours = 0;
+            batsman1Sixes = 0;
+          }
+          break;
+      }
+
+      // Reset partnership runs after a wicket
+      partnershipRuns = 0;
+    });
+    Navigator.of(context).pop();
   }
 
 
@@ -778,28 +853,61 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('New Bowler'),
-          content: TextField(
-            onChanged: (value) {
-              currentBowler = value; // Update the new bowler's name
-            },
-            decoration: InputDecoration(hintText: 'Enter new bowler\'s name'),
+          title: Text(
+            'New Bowler',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter bowler\'s name';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        currentBowler = value; // Update the new bowler's name
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Enter new bowler\'s name',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16), // Add some space between the text field and buttons
+                ],
+              ),
+            ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
+            ElevatedButton(
               child: Text('Add'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade900,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
-                if (currentBowler.isNotEmpty) {
-                  setState(() {
-                    // Update current bowler
-                    // Clear or reset any relevant statistics if needed
-                  });
+                if (_formKey.currentState!.validate()) {
+                  // Perform your logic to add the new bowler here
                   Navigator.of(context).pop();
                 }
               },
@@ -836,22 +944,27 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${widget.battingTeam}, 1st inning',
-                style: TextStyle(fontSize: 15),
+              Center(
+                child: Text(
+                  '${widget.battingTeam}, 1st Inning',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
               ),
               SizedBox(height: 6),
               Row(
                 children: [
                   Text(
-
                     '$score - $wickets ($overs - $balls)',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Spacer(),
                   Text(
                     'CRR: ${crr.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ],
               ),
@@ -943,6 +1056,7 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
               ),
               SizedBox(height: 5),
               Wrap(
+                // i changed it here that a checkbox is clicked at a time...
                 spacing: 6,
                 runSpacing: 6,
                 children: [
@@ -950,94 +1064,121 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
-                          value: isWide,
-                          onChanged: (val) {
-                            setState(() {
-                              isWide = val ?? false;
-                              isNoBall = false; // Only one can be true at a time
-                            });
-                          }),
-                      Text('Wide',style: TextStyle(fontSize: 12),),
+                        value: _isWide,
+                        onChanged: (val) {
+                          setState(() {
+                            _isWide = val ?? false;
+                            _isNoBall = false;
+                            _isByes = false;
+                            _isLegByes = false;
+                          });
+                        },
+                      ),
+                      Text('Wide', style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
-                          value: isNoBall,
-                          onChanged: (val) {
-                            setState(() {
-                              isNoBall = val ?? false;
-                              isWide = false; // Only one can be true at a time
-                            });
-                          }),
-                      Text('No Ball',style: TextStyle(fontSize: 12),),
+                        value: _isNoBall,
+                        onChanged: (val) {
+                          setState(() {
+                            _isNoBall = val ?? false;
+                            _isWide = false;
+                            _isByes = false;
+                            _isLegByes = false;
+                          });
+                        },
+                      ),
+                      Text('No Ball', style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
-                          value: isByes,
-                          onChanged: (val) {
-                            setState(() {
-                              isByes = val ?? false;
-                            });
-                          }),
-                      Text('Byes',style: TextStyle(fontSize: 12),),
+                        value: _isByes,
+                        onChanged: (val) {
+                          setState(() {
+                            _isByes = val ?? false;
+                            _isWide = false;
+                            _isNoBall = false;
+                            _isLegByes = false;
+                          });
+                        },
+                      ),
+                      Text('Byes', style: TextStyle(fontSize: 12),),
                     ],
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
-                          value: isLegByes,
-                          onChanged: (val) {
-                            setState(() {
-                              isLegByes = val ?? false;
-                            });
-                          }),
-                      Text('Leg Byes',style: TextStyle(fontSize: 12),),
+                        value: _isLegByes,
+                        onChanged: (val) {
+                          setState(() {
+                            _isLegByes = val ?? false;
+                            _isWide = false;
+                            _isNoBall = false;
+                            _isByes = false;
+                          });
+                        },
+                      ),
+                      Text('Leg Byes', style: TextStyle(fontSize: 12),),
                     ],
                   ),
+
+                  SizedBox(width: 6),
                   Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Checkbox(
-                          value: isWicket,
-                          onChanged: (val) {
+                      Transform(
+                        transform: Matrix4.skewX(-0.2),
+                        child: ElevatedButton(
+                          child: Text('Wicket', style: TextStyle(fontSize: 15),),
+                          onPressed: () {
                             setState(() {
-                              isWicket = val ?? false;
-                              if (isWicket) {
-                                addWicket(); // Call addWicket when the checkbox is selected
+                              _isWicket = !_isWicket;
+                              // todo i want once new batsman add then wicket will count
+                              // todo wicket will able to create multiple times ????
+                              if (_isWicket) {
+                                _showNewBatsmanDialog();
                               }
                             });
-                          }),
-                      Text('Wicket',style: TextStyle(fontSize: 12),),
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            backgroundColor: _isWicket ? Colors.red : Color(0xFF3b3b6d),
+                            foregroundColor: _isWicket ? Colors.white : Colors.white,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: retireBatsman,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF3b3b6d), // Background color
+                        ),
+                        child: Text(
+                          '      Retire      ',
+                          style: TextStyle(color: Colors.white,fontSize: 12),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: swapBatsman,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF3b3b6d), // Background color
+                        ),
+                        child: Text(
+                          'Swap Batsman',
+                          style: TextStyle(color: Colors.white,fontSize: 12),
+                        ),
+                      ),
                     ],
-                  ),
-                  SizedBox(width: 6), // Add some spacing between elements
-                  ElevatedButton(
-                    onPressed: retireBatsman,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF3b3b6d), // Background color
-                    ),
-                    child: Text(
-                      '      Retire      ',
-                      style: TextStyle(color: Colors.white,fontSize: 12),
-                    ),
-                  ),
-                  SizedBox(width: 8), // Add some spacing between elements
-                  ElevatedButton(
-                    onPressed: swapBatsman,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF3b3b6d), // Background color
-                    ),
-                    child: Text(
-                      'Swap Batsman',
-                      style: TextStyle(color: Colors.white,fontSize: 12),
-                    ),
-                  ),
+                  )
+
                 ],
               ),
               SizedBox(
@@ -1063,7 +1204,6 @@ class _ScoreCardPageState extends State<ScoreCardPage> {
                             ),
                             child: LayoutBuilder(
                               builder: (context, constraints) {
-                                // Adjust font size based on width constraint
                                 double fontSize = constraints.maxWidth * 0.05; // Adjust this factor as needed
                                 if (fontSize > 12) fontSize = 12; // Max font size to prevent it from being too large
                                 if (fontSize < 8) fontSize = 11; // Min font size to ensure readability

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ScoreBoard extends StatelessWidget {
@@ -33,7 +32,7 @@ class ScoreBoard extends StatelessWidget {
           Opacity(
             opacity: 0.3,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/bg.jpg'),
                   fit: BoxFit.cover,
@@ -180,10 +179,10 @@ class ScoreBoard extends StatelessWidget {
       String sixes,
       ) {
     return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-        color: Color(0xFFEEEFF5),
+        color: const Color(0xFFEEEFF5),
         borderRadius: BorderRadius.circular(15),
       ),
 

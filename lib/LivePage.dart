@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'ScoreBoard.dart';
 
 class LivePage extends StatelessWidget {
@@ -22,11 +20,11 @@ class LivePage extends StatelessWidget {
               fontSize: 27,
             ),
           ),
-          backgroundColor: Colors.transparent, // Make the background transparent
+          backgroundColor: Colors.transparent,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/bg.jpg'), // Replace with your image
+                image: AssetImage('assets/images/bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -136,14 +134,14 @@ class _DetailsPageState extends State<DetailsPage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _matchInfoCard(
               widget.team1Name,
               widget.team2Name,
               widget.runs,
               widget.overs,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildMatchPlayersCard(
               widget.strikerName,
               widget.nonStrikerName,
@@ -151,7 +149,7 @@ class _DetailsPageState extends State<DetailsPage> {
               widget.balls,
               widget.overs,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildMatchPlaceDetail(
               widget.matchPlace,
               widget.stadiumName,
@@ -167,9 +165,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
   Widget _matchInfoCard(String team1, String team2, int runs, int overs) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Color(0xFFEEEFF5),
+        color: const Color(0xFFEEEFF5),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -180,14 +178,14 @@ class _DetailsPageState extends State<DetailsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/bg.jpg'),
                     radius: 25,
                   ),
                   SizedBox(width: 20),
                   Text(
                     team1,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 26,
                       color: Color(0xFF3b3b6d),
                       fontWeight: FontWeight.bold,
@@ -195,9 +193,9 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                 ],
               ),
-              Padding(
+              const Padding(
                 padding:
-                    const EdgeInsets.only(left: 100),
+                    EdgeInsets.only(left: 100),
                 child: Text(
                   'vs',
                   style: TextStyle(fontSize: 26, color: Colors.black54),
@@ -205,14 +203,14 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
               Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/bg.jpg'),
                     radius: 25,
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Text(
                     team2,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 26,
                       color: Color(0xFF3b3b6d),
                       fontWeight: FontWeight.bold,
@@ -228,7 +226,7 @@ class _DetailsPageState extends State<DetailsPage> {
               children: [
                 Text(
                   '${runs} / ${overs}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF3b3b6d),
                       fontSize: 19,
                       fontWeight: FontWeight.w500),
@@ -245,9 +243,9 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget _buildMatchPlayersCard(String strikerName,
       String nonStrikerName, String ballerName,int balls, int overs) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Color(0xFFEEEFF5),
+        color: const Color(0xFFEEEFF5),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -259,13 +257,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Text(
                     strikerName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xFF3b3b6d),
                         fontSize: 21,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  const Text(
                       'Striker',
                     style: TextStyle(
                       color: Colors.black54,
@@ -277,13 +275,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Text(
                     nonStrikerName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xFF3b3b6d),
                         fontSize: 21,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  const Text(
                       'Non-Striker',
                       style: TextStyle(
                       color: Colors.black54,
@@ -293,29 +291,29 @@ class _DetailsPageState extends State<DetailsPage> {
               )
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             ballerName,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
                 color: Color(0xFF3b3b6d),
                 fontSize: 21
             ),
           ),
-          Text(
+          const Text(
               'Baller',
             style: TextStyle(
               color: Colors.black54,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             '${balls}/${overs}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 31
             ),
           ),
-          Text(
+          const Text(
             'Balls - Over',
             style: TextStyle(
               fontSize: 15,
@@ -330,9 +328,9 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget _buildMatchPlaceDetail(String place, String stadiumName,
       String recentOutPlayer, int recentPlayerRuns, int recentPlayerBalls) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Color(0xFFEEEFF5),
+        color: const Color(0xFFEEEFF5),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -340,7 +338,7 @@ class _DetailsPageState extends State<DetailsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              const Flexible(
                   child: Text(
                       'Match Place',
                     style: TextStyle(
@@ -353,7 +351,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   width: 200,
                   child: Text(
                     place,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF3b3b6d),
                       fontSize: 16,
@@ -363,11 +361,11 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              const Flexible(
                 child: Text(
                   'Stadium',
                   style: TextStyle(
@@ -380,7 +378,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   width: 200,
                   child: Text(
                     stadiumName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF3b3b6d),
                       fontSize: 16,
@@ -391,7 +389,7 @@ class _DetailsPageState extends State<DetailsPage> {
             ],
           ),
           SizedBox(height: 10),
-          Text(
+          const Text(
             'Recent Out Player',
             style: TextStyle(
               color: Colors.black87,
@@ -405,13 +403,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Text(
                     recentOutPlayer,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF3b3b6d),
                       fontSize: 18,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'player Name',
                     style: TextStyle(
                       color: Colors.black54,
@@ -423,13 +421,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Text(
                       '${recentPlayerRuns}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF3b3b6d),
                       fontSize: 18,
                     ),
                   ),
-                  Text(
+                  const Text(
                       'Runs',
                     style: TextStyle(
                       color: Colors.black54,
@@ -441,13 +439,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: [
                   Text(
                       '${recentPlayerBalls}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF3b3b6d),
                       fontSize: 18,
                     ),
                   ),
-                  Text(
+                  const Text(
                       'Balls',style: TextStyle(
                     color: Colors.black54,
                   ),

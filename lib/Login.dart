@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/bottom_nav.dart';
+import 'package:merge_capl/api/basics_api.dart';
 import 'SignUp.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'dart:convert';
 
 
 class LoginScreen extends StatefulWidget {
-   LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -67,9 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: TextFormField(
                           validator: (value) {
-                            if(value == null) {
+                            if (value == null) {
                               return "please Enter your Phone";
-                            } return null;
+                            }
+                            return null;
                           },
                           controller: phoneController,
                           style: const TextStyle(color: Colors.white),
@@ -92,9 +94,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: TextFormField(
                           validator: (value) {
-                            if(value == null) {
+                            if (value == null) {
                               return "Enter Your Password";
-                            } return null;
+                            }
+                            return null;
                           },
                           controller: passwordController,
                           style: const TextStyle(color: Colors.white),
@@ -118,9 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: screenWidth < 300 ? screenWidth * 0.8 : 300,
                         child: ElevatedButton(
                           onPressed: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
-                          //   ApiService obj = ApiService();
-                          // obj.signInRequest(phoneController.text, passwordController.text, context);
+                            BasicsApi object = BasicsApi();
+                          final response = object.loginApi(phoneController.text, passwordController.text, context);
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15),
