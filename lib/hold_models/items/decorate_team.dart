@@ -39,7 +39,8 @@ class DecorateTeam extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: MemoryImage(base64Decode(teamData.teamProfileUrl)),
+                  // image: MemoryImage(base64Decode(teamData.teamProfileUrl)),
+                  image: NetworkImage("https://res.cloudinary.com/dxzkqjacj/image/upload/v1724853006/316605_pmn5c7.webp"),
                   fit: BoxFit.cover,
                 ),
                 border: Border.all(

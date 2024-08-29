@@ -63,7 +63,7 @@ class _MemberScreenState extends State<MemberScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 18, top: 80),
+                  padding: const EdgeInsets.only(left: 18, top: 70),
                   child: Text(
                     "Add-Member-In-Team",
                     style: TextStyle(

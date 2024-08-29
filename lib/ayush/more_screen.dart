@@ -84,7 +84,8 @@ class _MorePageState extends State<MorePage> {
                                     playerName: 'Rahul',
                                     playerMobNumber: '74638900034',
                                     playerEmail: 'playerEmail',
-                                    playerGender: 'Male')));
+                                    playerGender: 'Male'
+                                )));
                       },
                       child: _card_builder('Account'),
                     ),

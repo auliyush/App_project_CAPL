@@ -1,13 +1,11 @@
 import 'dart:io';
-
+import 'dart:html' as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:typed_data';
-import 'dart:convert';
-
-
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:uuid/uuid.dart';
 import '../hold_models/items/team_data.dart';
 
@@ -19,37 +17,29 @@ class CreateTeamScreen extends StatefulWidget {
 class _CreateTeamScreenState extends State<CreateTeamScreen> {
   final _teamNameController = TextEditingController();
   final _teamNicknameController = TextEditingController();
+  File? _imageFile;
+  Uint8List? _webImage;
+  final ImagePicker _mobileImagePicker = ImagePicker();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  XFile? imageFile;
-
-  final ImagePicker imagePicker = ImagePicker();
-
-  String imagePath = "";
-  String? base64String;
-
-  // 11:47 --- 79
-
-  final _formKey = GlobalKey<FormState>();
-
-  void takePhoto(ImageSource source) async {
-    final pickedFile = await imagePicker.pickImage(source: source);
-    if (pickedFile != null) {
-      String imagePath = pickedFile.path;
-
-      List<int> imageByte = File(pickedFile.path).readAsBytesSync();
-      base64String = base64Encode(imageByte);
-
-      File file = File(imagePath);
-
-      Uint8List imageBytes = await file.readAsBytes();
-
-      base64String = base64.encode(imageBytes);
-
+  void _takePhoto(ImageSource source) async {
+    if (kIsWeb) {
+      final Uint8List? image = await ImagePickerWeb.getImageAsBytes();
       setState(() {
-        imageFile = pickedFile;
+        _webImage = image;
       });
+    } else {
+      final XFile? pickedFile = await _mobileImagePicker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
     }
   }
+
+
+
 
 
   @override
@@ -112,11 +102,11 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 60,
-                                backgroundImage: imageFile == null
-                                    ? AssetImage("assets/images/default.jpg")
-                                    : base64String != null
-                                    ? MemoryImage(base64Decode(base64String!)) as ImageProvider
-                                    : AssetImage("assets/images/default.jpg"),
+                                backgroundImage: _imageFile != null
+                                    ? FileImage(_imageFile!)
+                                    : _webImage != null
+                                    ? MemoryImage(_webImage!) as ImageProvider
+                                    : NetworkImage("https://res.cloudinary.com/dxzkqjacj/image/upload/v1724853006/316605_pmn5c7.webp"),
                               ),
                               Positioned(
                                 bottom: 10,
@@ -157,7 +147,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                               return 'Please enter some text';
                             }
                             return null;
-                          },
+                            },
                           decoration: InputDecoration(
                               labelText: "Team Name  *",
                               labelStyle: TextStyle(
@@ -245,7 +235,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                       final teamId = Uuid().v4();
                                       final teamItem = TeamData(
                                         teamId: teamId,
-                                        teamProfileUrl: "assets/images/default.jpg",
+                                        teamProfileUrl: "https://res.cloudinary.com/dxzkqjacj/image/upload/v1724851707/v4zltvtkiac1melha090.jpgg",
                                         teamName: _teamNameController.text,
                                         teamNickName: _teamNicknameController.text,
                                         batters: [],
@@ -283,48 +273,67 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
 
   Widget bottomSheet() {
     return Container(
-      height: 100,
+      height: 150,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Profile Photo",
-            style: TextStyle(fontSize: 20),
+            "Choose Profile Photo",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
           SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () {
-                  takePhoto(ImageSource.camera);
-                  Navigator.pop(context);
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.camera_alt_outlined),
-                    ),
-                    Text("Camera"),
-                  ],
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade900,
+                  foregroundColor: Colors.white,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
+                onPressed: () {
+                  _takePhoto(ImageSource.camera);
+                },
+                child: Text("Camera"),
               ),
-              InkWell(
-                onTap: () {
-                  takePhoto(ImageSource.gallery);
-                  Navigator.pop(context);
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.image),
-                    ),
-                    Text("Gallery"),
-                  ],
+              SizedBox(width: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade900,
+                  foregroundColor: Colors.white,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
+                onPressed: () {
+                  _takePhoto(ImageSource.gallery);
+                },
+                child: Text("Gallery"),
               ),
             ],
           ),

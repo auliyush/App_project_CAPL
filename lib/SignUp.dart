@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:merge_capl/Login.dart';
-import 'package:merge_capl/api/basics_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'integration/api/basics_api.dart';
 
 
 class SignUpScreen extends StatefulWidget {
