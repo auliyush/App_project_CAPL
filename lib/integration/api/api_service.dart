@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
-import '../aman/bottom_nav.dart';
-import '../hold_models/items/team_data.dart';
+
+import '../../aman/bottom_nav.dart';
+import '../../hold_models/items/team_data.dart';
 
 class ApiService {
   static const loginUrl = "http://localhost:8080/capl/user/signIn";

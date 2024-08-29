@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:merge_capl/data_classes/login_response.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 
-import '../Login.dart';
-import '../aman/bottom_nav.dart';
+import '../../Login.dart';
+import '../../aman/bottom_nav.dart';
+import '../data_classes/login_response.dart';
+import '../providers/login_provider.dart';
 
 class BasicsApi {
   final signUpUrl = "http://localhost:8080/app/signUp";
@@ -15,8 +17,7 @@ class BasicsApi {
   Future<void> signUpApi(String userName, String userPhone, String userEmail,
       String userPassword, String userRole, BuildContext context) async {
     try {
-      final response = await http.post(
-          Uri.parse(signUpUrl),
+      final response = await http.post(Uri.parse(signUpUrl),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -26,14 +27,12 @@ class BasicsApi {
             "userEmail": userEmail,
             "userPassword": userPassword,
             "userRole": userRole
-          }
-          )
-      );
+          }));
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         if (jsonData) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LoginScreen(),
@@ -80,10 +79,12 @@ class BasicsApi {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final loginResponse = LoginResponse.fromJson(jsonData);
+        // for using creator id in anywhere of my pages...
+        Provider.of<LoginProvider>(context, listen: false).updateLoginResponse(loginResponse);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
         // for checking data is coming from server or not..
-        print(loginResponse.creatorId);
-        print(loginResponse.role);
+        // print(loginResponse.creatorId);
+        // print(loginResponse.role);
         return loginResponse;
       }  else {
         ScaffoldMessenger.of(context).showSnackBar(

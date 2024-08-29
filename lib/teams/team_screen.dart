@@ -67,7 +67,7 @@ class _TeamScreenState extends State<TeamScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 18, top: 80),
+                  padding: const EdgeInsets.only(left: 18, top: 60),
                   child: Text(
                     "Add-Your-Team",
                     style: TextStyle(
@@ -81,28 +81,31 @@ class _TeamScreenState extends State<TeamScreen> {
             ),
           ),
           Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  topRight: Radius.circular(35),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 18.0),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35),
+                    topRight: Radius.circular(35),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: Consumer<ListModel>(
-                  builder: (context, model, child) {
-                    return ListView.builder(
-                      shrinkWrap: false,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: model.teams.length,
-                      itemBuilder: (context, index) {
-                        return DecorateTeam(teamData: model.teams[index]);
-                      },
-                    );
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Consumer<ListModel>(
+                    builder: (context, model, child) {
+                      return ListView.builder(
+                        shrinkWrap: false,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: model.teams.length,
+                        itemBuilder: (context, index) {
+                          return DecorateTeam(teamData: model.teams[index]);
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
