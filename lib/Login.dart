@@ -180,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: screenWidth * 0.15,
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.facebook, color: Colors.blue, size: 30,),
                               onPressed: () {
                                 launchUrl(_urlFB);

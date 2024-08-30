@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'about_player_details_page.dart';
 
 class PlayerLists{
   int? playerRank;

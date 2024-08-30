@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 
 import '../../Login.dart';
+import '../../aman/audience/audience_bottom.dart';
 import '../../aman/bottom_nav.dart';
+import '../../aman/player/player_bottam.dart';
 import '../data_classes/login_response.dart';
 import '../providers/login_provider.dart';
 
@@ -79,9 +81,19 @@ class BasicsApi {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final loginResponse = LoginResponse.fromJson(jsonData);
+        if(loginResponse.role.toLowerCase() == "admin") {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
+
+        } else if(loginResponse.role.toLowerCase() == "player"){
+          // call here player nav
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PlayerBottom()));
+
+        } else {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AudienceBottom()));
+    }
         // for using creator id in anywhere of my pages...
         Provider.of<LoginProvider>(context, listen: false).updateLoginResponse(loginResponse);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNav()));
         // for checking data is coming from server or not..
         // print(loginResponse.creatorId);
         // print(loginResponse.role);
