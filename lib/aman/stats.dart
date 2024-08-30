@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:merge_capl/aman/players_details.dart';
+import 'package:merge_capl/aman/player/players_details.dart';
 import '../Login.dart';
-import 'about_player_details_page.dart';
+import 'player/about_player_details_page.dart';
 import 'extra.dart';
 import 'floate_button.dart';
 

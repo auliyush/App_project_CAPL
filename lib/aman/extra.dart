@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:merge_capl/aman/players_details.dart';
-import 'about_player_details_page.dart';
+import 'package:merge_capl/aman/player/players_details.dart';
+import 'player/about_player_details_page.dart';
 
 class PlayersItem extends StatelessWidget {
   final PlayerLists playerLists;

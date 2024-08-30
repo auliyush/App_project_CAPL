@@ -1,12 +1,11 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merge_capl/Login.dart';
+import 'package:merge_capl/aman/audience/audience_accouts.dart';
 import 'package:merge_capl/ayush/results_screen.dart';
 
 import '../tournament.dart';
 import 'about_us.dart';
-import 'account_screen.dart';
 import 'feedback_screen.dart';
 
 class MorePage extends StatefulWidget {
@@ -28,7 +27,7 @@ class _MorePageState extends State<MorePage> {
             children: [
               Container(
                 height: 130,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/bg.jpg'),
                     fit: BoxFit.cover,
@@ -53,7 +52,7 @@ class _MorePageState extends State<MorePage> {
                 child: Text(
                   "More",
                   style: TextStyle(
-                    fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44, // adjust font size based on screen width
+                    fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -79,7 +78,7 @@ class _MorePageState extends State<MorePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AccountPage(
+                                builder: (context) => const AudienceAccountPage(
                                     playerPhotoUrl: 'assets/images/profile.webp',
                                     playerName: 'Rahul',
                                     playerMobNumber: '74638900034',
@@ -89,11 +88,11 @@ class _MorePageState extends State<MorePage> {
                       },
                       child: _card_builder('Account'),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white70,
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
                         surfaceTintColor: Colors.white,

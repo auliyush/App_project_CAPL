@@ -5,9 +5,9 @@ import '../hold_models/items/team_data.dart';
 import '../hold_models/player_list_model.dart';
 
 class BatterScreen extends StatefulWidget {
-  final TeamData teamData;
+  // final TeamData teamData;
 
-  const BatterScreen({super.key, required this.teamData});
+  // const BatterScreen({super.key, required this.teamData});
 
   @override
   State<BatterScreen> createState() => _BatterScreenState();

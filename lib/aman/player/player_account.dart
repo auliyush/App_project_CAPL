@@ -3,15 +3,16 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../hold_models/items/player_data.dart';
 
-class AccountPage extends StatefulWidget {
+class PlayerAccount extends StatefulWidget {
   final String playerPhotoUrl;
   final String playerName;
   final String playerMobNumber;
   final String playerEmail;
   final String playerGender;
 
-  const AccountPage({
+  PlayerAccount({
     Key? key,
     required this.playerPhotoUrl,
     required this.playerName,
@@ -24,7 +25,7 @@ class AccountPage extends StatefulWidget {
   _AccountPageState createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends State<PlayerAccount> {
   String imagePath = "";
   String? base64String;
 
@@ -35,17 +36,18 @@ class _AccountPageState extends State<AccountPage> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
   String? type;
-  String? subtype; // To store Spinner, Pace, Left Arm, Right Arm options
 
   @override
   void initState() {
     super.initState();
+    // Initialize controllers with player data
     _nameController.text = widget.playerName;
     phoneController.text = widget.playerMobNumber;
   }
 
   @override
   void dispose() {
+    // Clean up the controllers when the widget is disposed
     _nameController.dispose();
     _nicknameController.dispose();
     phoneController.dispose();
@@ -120,11 +122,11 @@ class _AccountPageState extends State<AccountPage> {
                       CircleAvatar(
                         radius: 60,
                         backgroundImage: imageFile == null
-                            ? const AssetImage("assets/images/default.jpg")
+                            ? AssetImage("assets/images/default.jpg")
                             : base64String != null
                             ? MemoryImage(base64Decode(base64String!))
                         as ImageProvider
-                            : const AssetImage("assets/images/default.jpg"),
+                            : AssetImage("assets/images/default.jpg"),
                       ),
                       Positioned(
                         bottom: 10,
@@ -137,7 +139,7 @@ class _AccountPageState extends State<AccountPage> {
                           padding: EdgeInsets.all(8),
                           child: InkWell(
                             onTap: _pickImage,
-                            child: const Icon(
+                            child: Icon(
                               Icons.camera_alt,
                               color: Colors.white,
                               size: 20,
@@ -168,12 +170,12 @@ class _AccountPageState extends State<AccountPage> {
                       },
                       decoration: InputDecoration(
                         labelText: "Name *",
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Color(0xFF3b3b6d),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(31),
-                          borderSide: const BorderSide(color: Color(0xFF3b3b6d),
+                          borderSide: BorderSide(color: Color(0xFF3b3b6d),
                               width: 2),
                         ),
                       ),
@@ -193,12 +195,12 @@ class _AccountPageState extends State<AccountPage> {
                       },
                       decoration: InputDecoration(
                         labelText: "Nickname *",
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Color(0xFF3b3b6d),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(31),
-                          borderSide: const BorderSide(color: Color(0xFF3b3b6d),
+                          borderSide: BorderSide(color: Color(0xFF3b3b6d),
                               width: 2),
                         ),
                       ),
@@ -223,12 +225,12 @@ class _AccountPageState extends State<AccountPage> {
                       },
                       decoration: InputDecoration(
                         labelText: "Phone *",
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Color(0xFF3b3b6d),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(31),
-                          borderSide: const BorderSide(color: Color(0xFF3b3b6d),
+                          borderSide: BorderSide(color: Color(0xFF3b3b6d),
                               width: 2),
                         ),
                       ),
@@ -249,12 +251,12 @@ class _AccountPageState extends State<AccountPage> {
                       },
                       decoration: InputDecoration(
                         labelText: "Email *",
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Color(0xFF3b3b6d),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(31),
-                          borderSide: const BorderSide(color: Color(0xFF3b3b6d),
+                          borderSide: BorderSide(color: Color(0xFF3b3b6d),
                               width: 2),
                         ),
                       ),
@@ -276,251 +278,136 @@ class _AccountPageState extends State<AccountPage> {
                         hintText: "Address *",
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(31),
-                          borderSide: const BorderSide(color: Color(0xFF3b3b6d),
+                          borderSide: BorderSide(color: Color(0xFF3b3b6d),
                               width: 2),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  const Text(
-                    'Player Type',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // const Text(
-                        //   'Type:',
-                        //   style: TextStyle(
-                        //       fontSize: 18,
-                        //       fontWeight: FontWeight.bold),
-                        // ),
-                        const SizedBox(height: 10),
+                        Text('Type:',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
                         Row(
                           children: [
                             Theme(
                               data: Theme.of(context).copyWith(
-                                unselectedWidgetColor: Colors.orange.shade900,
+                                radioTheme: RadioThemeData(
+                                  fillColor: MaterialStateProperty.all(
+                                      Colors.orange
+                                          .shade900), // color for selected radio button
+                                ),
                               ),
                               child: Radio(
-                                activeColor: Colors.orange.shade900,
-                                value: 'Batsman',
+                                value: 'Spinner',
                                 groupValue: type,
                                 onChanged: (value) {
                                   setState(() {
-                                    type = value.toString();
-                                    subtype = null; // Reset subtype
+                                    type = value as String;
                                   });
                                 },
                               ),
                             ),
-                            const Text(
-                              'Batsman',
-                              style: TextStyle(fontSize: 16),
-                            ),
+                            Text('Spinner'),
                           ],
                         ),
                         Row(
                           children: [
                             Theme(
                               data: Theme.of(context).copyWith(
-                                unselectedWidgetColor: Colors.orange.shade900,
+                                radioTheme: RadioThemeData(
+                                  fillColor: MaterialStateProperty.all(
+                                      Colors.orange
+                                          .shade900), // color for selected radio button
+                                ),
                               ),
                               child: Radio(
-                                activeColor: Colors.orange.shade900,
-                                value: 'Bowler',
+                                value: 'Pace',
                                 groupValue: type,
                                 onChanged: (value) {
                                   setState(() {
-                                    type = value.toString();
-                                    subtype = null; // Reset subtype
+                                    type = value as String;
                                   });
                                 },
                               ),
                             ),
-                            const Text(
-                              'Bowler',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                unselectedWidgetColor: Colors.orange.shade900,
-                              ),
-                              child: Radio(
-                                activeColor: Colors.orange.shade900,
-                                value: 'Allrounder',
-                                groupValue: type,
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value.toString();
-                                    subtype = null; // Reset subtype
-                                  });
-                                },
-                              ),
-                            ),
-                            const Text(
-                              'Allrounder',
-                              style: TextStyle(fontSize: 16),
-                            ),
+                            Text('Pace'),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  if (type == 'Bowler') ...[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // const Text(
-                          //   'Bowler Type:',
-                          //   style: TextStyle(
-                          //       fontSize: 18,
-                          //       fontWeight: FontWeight.bold),
-                          // ),
-                          Row(
-                            children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  unselectedWidgetColor: Colors.orange.shade900,
-                                ),
-                                child: Radio(
-                                  activeColor: Colors.orange.shade900,
-                                  value: 'Spinner',
-                                  groupValue: subtype,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      subtype = value.toString();
-                                    });
-                                  },
-                                ),
-                              ),
-                              const Text(
-                                'Spinner',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  unselectedWidgetColor: Colors.orange.shade900,
-                                ),
-                                child: Radio(
-                                  activeColor: Colors.orange.shade900,
-                                  value: 'Pace',
-                                  groupValue: subtype,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      subtype = value.toString();
-                                    });
-                                  },
-                                ),
-                              ),
-                              const Text(
-                                'Pace',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ] else if (type == 'Batsman') ...[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // const Text(
-                          //   'Batsman Type:',
-                          //   style: TextStyle(
-                          //       fontSize: 18,
-                          //       fontWeight: FontWeight.bold),
-                          // ),
-                          Row(
-                            children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  unselectedWidgetColor: Colors.orange.shade900,
-                                ),
-                                child: Radio(
-                                  activeColor: Colors.orange.shade900,
-                                  value: 'Left Arm',
-                                  groupValue: subtype,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      subtype = value.toString();
-                                    });
-                                  },
-                                ),
-                              ),
-                              const Text(
-                                'Left Arm',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  unselectedWidgetColor: Colors.orange.shade900,
-                                ),
-                                child: Radio(
-                                  activeColor: Colors.orange.shade900,
-                                  value: 'Right Arm',
-                                  groupValue: subtype,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      subtype = value.toString();
-                                    });
-                                  },
-                                ),
-                              ),
-                              const Text(
-                                'Right Arm',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  SizedBox(height: 25),
+                  SizedBox(height: 15),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade900,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
+                    padding: const EdgeInsets.all(18),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF3b3b6d),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(25.0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF3b3b6d).withOpacity(0.5),
+                            blurRadius: 10.0,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF3b3b6d),
+                            Color(0xFF2b2b4d),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Handle form submission logic
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Text(
-                          "Update",
-                          style: TextStyle(fontSize: 18 , color: Colors.white),
-                        ),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF3b3b6d),
+                              foregroundColor: Colors.white,
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              padding: EdgeInsets.all(15),
+                              minimumSize: Size(constraints.maxWidth * 0.9, 40),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                final playerList = PlayerData(
+                                  playerPhotoUrl: base64String!,
+                                  playerName: _nameController.text,
+                                  playerNickName: _nicknameController.text,
+                                );
+                                Navigator.pop(context, playerList);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Data Saved!')),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Save Team',
+                              style: TextStyle(
+                                fontFamily: "Netflix",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
