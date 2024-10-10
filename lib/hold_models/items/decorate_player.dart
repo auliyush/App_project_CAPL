@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:merge_capl/aman/player/player_account.dart';
 import 'player_data.dart';
 
-class DecoratePlayer extends StatelessWidget{
-  final PlayerData playerData;
+class DecoratePlayer extends StatelessWidget {
+  final FetchedPlayerData playerData;
 
   const DecoratePlayer({
     Key? key, required this.playerData,
-  }) : super(key : key);
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,7 +38,7 @@ class DecoratePlayer extends StatelessWidget{
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: MemoryImage(base64Decode(playerData.playerPhotoUrl)),
+                  image: NetworkImage(playerData.playerPhotoUrl),
                   fit: BoxFit.cover,
                 ),
                 border: Border.all(
@@ -74,7 +76,15 @@ class DecoratePlayer extends StatelessWidget{
               child: IconButton(
                 icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
                 onPressed: () {
-                  // todo navigate it to player profile
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) =>
+                          PlayerAccount(
+                              playerPhotoUrl: playerData.playerPhotoUrl,
+                              playerName: playerData.playerName!,
+                              playerMobNumber: playerData.playerNickName!,
+                              playerEmail: playerData.playerEmail!,
+                              playerGender: "MALE")));
+                  // todo navigate it to player profile right now not in correct profile
                 },
               ),
             ),

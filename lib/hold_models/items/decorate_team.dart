@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/hold_models/items/team_data.dart';
 
 import '../../teams/member_screen.dart';
-
 class DecorateTeam extends StatelessWidget {
   final TeamData teamData;
+  // final VoidCallback? onTap;
 
   const DecorateTeam({
     super.key,
     required this.teamData,
+    // this.onTap,
   });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,19 +36,10 @@ class DecorateTeam extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(left: 20),
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  // image: MemoryImage(base64Decode(teamData.teamProfileUrl)),
-                  image: NetworkImage("https://res.cloudinary.com/dxzkqjacj/image/upload/v1724853006/316605_pmn5c7.webp"),
-                  fit: BoxFit.cover,
-                ),
-                border: Border.all(
-                  width: 3,
-                  color: Colors.black12,
-                ),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(teamData.teamProfileUrl),
+                backgroundColor: Colors.white,
               ),
             ),
             SizedBox(width: 16),
@@ -56,19 +49,24 @@ class DecorateTeam extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${teamData.teamName}',
+                    teamData.teamName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19,
                       color: Colors.black,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  SizedBox(height: 4),
                   Text(
-                    '${teamData.teamNickName}',
+                    teamData.teamNickName,
                     style: TextStyle(
                       fontSize: 15.0,
                       color: Colors.black54,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

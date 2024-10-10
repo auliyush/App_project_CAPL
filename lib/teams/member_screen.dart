@@ -26,7 +26,7 @@ class _MemberScreenState extends State<MemberScreen> {
         .size
         .height;
     final List<Widget> _tabs = [
-      Batters(teamData: widget.teamData,),
+      Batters(teamData: widget.teamData),
       Bowlers(teamData: widget.teamData,),
       AllRounders(teamData: widget.teamData,)
     ];
@@ -65,7 +65,7 @@ class _MemberScreenState extends State<MemberScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 18, top: 70),
                   child: Text(
-                    "Add-Member-In-Team",
+                    "Team Members",
                     style: TextStyle(
                       fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44,
                       color: Colors.white,

@@ -1,3 +1,19 @@
+// import 'package:flutter/cupertino.dart';
+//
+// class LoginProvider with ChangeNotifier {
+//   LoginResponse? _loginResponse;
+//
+//   LoginResponse? get loginResponse => _loginResponse;
+//
+//   void setLoginResponse(LoginResponse loginResponse) {
+//     _loginResponse = loginResponse;
+//     notifyListeners();
+//   }
+// }
+
+
+
+
 class LoginResponse {
   final String creatorId;
   final String role;
@@ -10,5 +26,4 @@ class LoginResponse {
       role: json["userRole"],
     );
   }
-
 }

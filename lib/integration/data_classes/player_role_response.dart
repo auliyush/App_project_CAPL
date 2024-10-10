@@ -1,42 +1,40 @@
 class PlayerRoleResponse {
+  List<PlayerDataByRole> playerRoles;
 
-  String playerName;
-  int jerseyNumber;
+  PlayerRoleResponse({required this.playerRoles});
 
-  PlayerRoleResponse({required this.playerName , required this.jerseyNumber});
-
-  factory PlayerRoleResponse.fromJson(Map<String , dynamic> json) {
+  factory PlayerRoleResponse.fromJsonList(List json) {
     return PlayerRoleResponse(
-      playerName: json["playerName"],
-      jerseyNumber: json["jerseyNumber"],
+      playerRoles: json.map((e) => PlayerDataByRole.fromJson(e)).toList(),
     );
   }
 }
-// void main() {
-//   List<String> playerList = [
-//     'Player1',
-//     'Player2',
-//     'Player3',
-//     'Player4',
-//     'Player5',
-//     'Player6',
-//     'Player7',
-//     'Player8',
-//     'Player9',
-//     'Player10'
-//   ];
-//
-//   List<String> players = ['Player3', 'Player6', 'Player9', 'Player1'];
-//
-//   // Step 1: Print players from the players list
-//   for (String player in players) {
-//     print(player);
-//   }
-//
-//   // Step 2: Print remaining players from playerList that are not in players
-//   for (String player in playerList) {
-//     if (!players.contains(player)) {
-//       print(player);
-//     }
-//   }
-// }
+class PlayerDataByRole {
+  String playerId;
+  String playerName;
+  String playerNickname;
+  String playerProfilePhotoUrl;
+  String playerSubType;
+  bool inTeam;
+
+  PlayerDataByRole({
+    required this.playerId,
+    required this.playerName,
+    required this.playerNickname,
+    required this.playerProfilePhotoUrl,
+    required this.playerSubType,
+    required this.inTeam,
+  });
+
+
+  factory PlayerDataByRole.fromJson(Map<String, dynamic> json) {
+    return PlayerDataByRole(
+      playerId: json["playerId"],
+      playerName: json["playerName"],
+      playerNickname: json["playerNickName"],
+      playerProfilePhotoUrl: json["playerProfilePhotoUrl"],
+      playerSubType: json["playerSubType"],
+      inTeam: json["inTeam"],
+    );
+  }
+}

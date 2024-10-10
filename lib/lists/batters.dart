@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:merge_capl/hold_models/items/decorate_player.dart';
+import 'package:merge_capl/integration/api/player_list.dart';
 import 'package:provider/provider.dart';
 import '../hold_models/items/player_data.dart';
 import '../hold_models/items/team_data.dart';
@@ -15,8 +20,14 @@ class Batters extends StatefulWidget {
 }
 
 class _BattersState extends State<Batters> {
-  PlayerData? _selectedPlayer;
+  late Future<List<FetchedPlayerData>?> _future;
+  PlayerApi playerApi = PlayerApi();
 
+  @override
+  void initState() {
+    super.initState();
+    _future = playerApi.getPlayerByRoleForTeam(widget.teamData.teamId,"batter", context);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,67 +40,53 @@ class _BattersState extends State<Batters> {
           ),
           backgroundColor: Color(0xFF3b3b6d),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PlayerList()));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "batter", teamId: widget.teamData.teamId,)));
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Consumer<ListModel>(
-          builder: (context, model, child) {
-            final batters = model.getTeamBatters(widget.teamData.teamId);
-            return Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  for (PlayerData player in batters)
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: _selectedPlayer == player ? Colors.blueAccent : Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            title: Text("player.name"), // Use the actual player name
-                            subtitle: Text('Additional details'), // Replace with actual details if available
-                          ),
-                          if (_selectedPlayer == player)
-                            ElevatedButton(
-                              onPressed: () {
-                                // Handle selection confirmation
-                                // For example, you might update a model or navigate
-                                print('Selected player: ');
-                              },
-                              child: Text('Confirm Selection'),
-                            ),
-                          if (_selectedPlayer != player)
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _selectedPlayer = player;
-                                });
-                              },
-                              child: Text('Select'),
-                            ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            );
-          },
+      body:  Padding(
+        padding: const EdgeInsets.only(top: 18.0),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white24,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(35),
+              topRight: Radius.circular(35),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: FutureBuilder(
+              future: _future,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data != null) {
+                    return ListView.builder(
+                      shrinkWrap: false,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return DecoratePlayer(playerData: snapshot.data![index],);
+                      },
+                    );
+                  } else {
+                    return Text('No data available');
+                  }
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
         ),
       ),
     );
   }
+
+  /// todo work is that i have to complete add player in team first then do it
+
 }

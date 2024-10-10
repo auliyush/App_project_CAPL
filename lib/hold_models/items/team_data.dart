@@ -5,17 +5,24 @@ class TeamData {
   String teamName;
   String teamNickName;
   String teamProfileUrl;
-  List<PlayerData> batters;
-  List<PlayerData> bowlers;
-  List<PlayerData> allRounders;
+  List<FetchedPlayerData> players;
 
   TeamData({
     required this.teamId,
     required this.teamName,
     required this.teamNickName,
     required this.teamProfileUrl,
-    this.batters = const [],
-    this.bowlers = const [],
-    this.allRounders = const [],
+     required this.players,
   });
+  factory TeamData.fromJson(Map<String, dynamic> jsonData) {
+    List<FetchedPlayerData> players = (jsonData['playerList'] as List<dynamic>).map((playerJson) => FetchedPlayerData.fromJson(playerJson)).toList().cast<FetchedPlayerData>();
+
+    return TeamData(
+      teamId: jsonData["teamId"],
+      teamProfileUrl: jsonData["teamProfilePhotoUrl"],
+      teamName: jsonData["teamName"],
+      teamNickName: jsonData["teamNickName"],
+      players: players,
+    );
+  }
 }

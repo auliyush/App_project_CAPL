@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:merge_capl/Login.dart';
-import 'package:provider/provider.dart';
+import 'package:merge_capl/integration/api/team_list.dart';
 
+import '../Login.dart';
 import '../hold_models/items/decorate_team.dart';
-import '../hold_models/player_list_model.dart';
+import '../hold_models/items/team_data.dart';
 import 'create_team_screen.dart';
-
 class TeamScreen extends StatefulWidget {
-
   @override
   State<TeamScreen> createState() => _TeamScreenState();
 }
 
 class _TeamScreenState extends State<TeamScreen> {
+  late Future<List<TeamData>?> _future;
+  TeamList list = TeamList();
+
+  @override
+  void initState() {
+    super.initState();
+    _future = list.getTeamList(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -21,14 +28,10 @@ class _TeamScreenState extends State<TeamScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 20, bottom: 15),
         child: FloatingActionButton(
+          heroTag: null,
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CreateTeamScreen()))
-                .then((value) {
-              if (value != null) {
-                Provider.of<ListModel>(context, listen: false).addNewTeam(value);
-              }
-            });
+                MaterialPageRoute(builder: (context) => CreateTeamScreen()));
           },
           child: Icon(
             Icons.add,
@@ -55,14 +58,18 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.02, vertical: screenHeight * 0.02),
+                      horizontal: screenWidth * 0.02,
+                      vertical: screenHeight * 0.02),
                   child: IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
                     },
                   ),
                 ),
@@ -71,7 +78,7 @@ class _TeamScreenState extends State<TeamScreen> {
                   child: Text(
                     "Add-Your-Team",
                     style: TextStyle(
-                      fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44, // adjust font size based on screen width
+                      fontSize: screenWidth <= 750 ? screenWidth * 0.06 : 44,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -94,16 +101,27 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Consumer<ListModel>(
-                    builder: (context, model, child) {
-                      return ListView.builder(
-                        shrinkWrap: false,
-                        physics: ClampingScrollPhysics(),
-                        itemCount: model.teams.length,
-                        itemBuilder: (context, index) {
-                          return DecorateTeam(teamData: model.teams[index]);
-                        },
-                      );
+                  child: FutureBuilder(
+                    future: _future,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                            shrinkWrap: false,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return DecorateTeam(teamData: snapshot.data![index]);
+                            },
+                          );
+                        } else {
+                          return Text('No data available');
+                        }
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
                     },
                   ),
                 ),

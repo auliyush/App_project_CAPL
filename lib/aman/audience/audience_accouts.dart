@@ -195,7 +195,7 @@ class AudienceAccountPage extends StatelessWidget {
                         padding: const EdgeInsets.only(
                             top: 13.0, bottom: 8, left: 8),
                         child: Text(
-                          playerName,
+                          playerEmail,
                           style: const TextStyle(
                               color: Colors.black54,
                               fontSize: 20,

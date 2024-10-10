@@ -1,57 +1,106 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merge_capl/integration/api/player_list.dart';
+import 'package:http/http.dart' as http;
+
+import '../integration/data_classes/player_role_response.dart';
 
 class Player {
+  final String playerId;
   final String name;
+  final String playerPhoto;
   final String role;
   final String playerSpec;
-  final int jerseyNumber;
+  final bool inTeam;
 
-  Player({required this.name, required this.role, required this.jerseyNumber, required this.playerSpec});
+  Player({
+    required this.playerId,
+    required this.name,
+    required this.role,
+    required this.playerPhoto,
+    required this.playerSpec,
+    required this.inTeam,
+  });
+
+  static List<Player> players = [];
+
+  static void addPlayersFromResponse(List<PlayerDataByRole> playerRoles) {
+    players.clear(); // Clear the players list before adding new data
+    for (var playerRole in playerRoles) {
+      players.add(Player(
+        playerId: playerRole.playerId,
+        name: playerRole.playerName,
+        role: "Batter",
+        playerSpec: playerRole.playerSubType,
+        playerPhoto: playerRole.playerProfilePhotoUrl,
+        inTeam: playerRole.inTeam,
+      ));
+    }
+  }
 }
 
 class PlayerList extends StatefulWidget {
+  String? playerType;
+  String? teamId;
+  PlayerList({required this.playerType, required this.teamId});
   @override
   _PlayerListState createState() => _PlayerListState();
 }
 
 class _PlayerListState extends State<PlayerList> {
-  List<Player> players = [
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    Player(name: 'Player 1', role: 'Batter', jerseyNumber: 10, playerSpec: "left-arm"),
-    // Add more players as needed
-  ];
+  Future<PlayerRoleResponse?>? playerRoleResponseFuture;
 
+  PlayerApi api = PlayerApi();
   Map<int, bool> selectedPlayers = {};
+  List<String> selectedPlayerId = []; // for sent data to server which is selected.
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPlayerData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchPlayerData();
+  }
+
+  void _fetchPlayerData() {
+    if (selectedPlayers.containsValue(true)) {
+      Player.players.clear();
+      // selectedPlayers.clear();
+    }
+
+    // Fetch new data from the server
+    setState(() {
+      playerRoleResponseFuture = api.getPlayerListByRole(widget.playerType!, context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      body: Column(
-        children: [
-          _buildHeader(screenWidth, screenHeight),
-          _buildPlayerList(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 25),
-            child: _buildApplyButton(),
-          ),
-        ],
+      body: FutureBuilder<PlayerRoleResponse?>(
+        future: playerRoleResponseFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }  return Column(
+            children: [
+              _buildHeader(screenWidth, screenHeight),
+              _buildPlayerList(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: _buildApplyButton(),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -102,45 +151,92 @@ class _PlayerListState extends State<PlayerList> {
   Widget _buildPlayerList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: players.length,
+        itemCount: Player.players.length,
         itemBuilder: (context, index) {
-          return _buildPlayerTile(index);
+          return _buildPlayerTile(index, Player.players[index].inTeam);
         },
       ),
     );
   }
 
-  Widget _buildPlayerTile(int index) {
-    return ListTile(
-      title: Text(players[index].name),
-      subtitle: Row(
-        children: [
-          // Text('Jersey Number: ${players[index].jerseyNumber}'),
-          Text('${players[index].playerSpec}'),
-        ],
+  Widget _buildPlayerTile(int index, bool inTeamStatus) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-      trailing: _buildSelectButton(index),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 30,
+          backgroundImage: NetworkImage('${Player.players[index].playerPhoto}'),
+        ),
+        title: Text(
+          Player.players[index].name,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Row(
+          children: [
+            Text(
+              '${Player.players[index].playerSpec}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        trailing: _buildSelectButton(index, inTeamStatus),
+        contentPadding: EdgeInsets.all(10),
+      ),
     );
   }
 
-  Widget _buildSelectButton(int index) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: selectedPlayers[index] ?? false ? Colors.indigo.shade900 : Colors.grey,
-        elevation: 0,
-        padding: EdgeInsets.all(10),
+  Widget _buildSelectButton(int index , bool inTeamStatus) {
+    bool isSelected = selectedPlayers[index] ?? false;
+    bool isInTeam = selectedPlayerId.contains(Player.players[index].playerId);
+    if (inTeamStatus) {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: isSelected ? Colors.indigo.shade900 : Colors.grey,
+          elevation: 0,
+          padding: EdgeInsets.all(10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: isInTeam
+            ? null
+            : () {
+          setState(() {
+            selectedPlayers[index] = !isSelected;
+          });
+        },
+        child: Text(isSelected ? 'Selected' : 'Select'),
+      );
+    } else {
+      return Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-      ),
-      onPressed: () {
-        setState(() {
-          selectedPlayers[index] = !(selectedPlayers[index] ?? false);
-        });
-      },
-      child: Text(selectedPlayers[index] ?? false ? 'Selected' : 'Select'),
-    );
+        elevation: 1, // added some elevation to give it a 3D effect
+        color: Colors.grey,
+        child: Container(
+          padding: EdgeInsets.all(16), // added some padding to give it some breathing room
+          child: Text(
+            'Selected',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18, // increased font size for better readability
+              fontWeight: FontWeight.bold, // made the text bold for emphasis
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildApplyButton() {
@@ -148,7 +244,7 @@ class _PlayerListState extends State<PlayerList> {
       padding: const EdgeInsets.only(top: 24.0),
       child: Center(
         child: Transform(
-          transform: Matrix4.skewX(-0.2), // skew the button to the left
+          transform: Matrix4.skewX(-0.2),
           child: ElevatedButton(
             child: Text(
               'Apply',
@@ -170,6 +266,16 @@ class _PlayerListState extends State<PlayerList> {
               shadowColor: Colors.blue.shade900,
             ),
             onPressed: () {
+              // Store selected player IDs in selectedPlayerId list
+              selectedPlayerId.clear();
+              for (int i = 0; i < Player.players.length; i++) {
+                if (selectedPlayers[i] ?? false) {
+                  selectedPlayerId.add(Player.players[i].playerId);
+                }
+              }
+              // this helps to call my api add player in team correctly...
+              api.addPlayerInTeam(selectedPlayerId,widget.teamId!, context);
+              // print('Selected player IDs: $selectedPlayerId');
               Navigator.pop(context);
             },
           ),
@@ -177,4 +283,5 @@ class _PlayerListState extends State<PlayerList> {
       ),
     );
   }
+
 }

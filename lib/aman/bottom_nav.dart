@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/stats.dart';
 import 'package:merge_capl/amit/create_match.dart';
 import 'package:merge_capl/ayush/more_screen.dart';
+import 'package:merge_capl/integration/api/team_list.dart';
 import 'package:merge_capl/teams/team_screen.dart';
 
 import '../home.dart';
@@ -86,6 +87,10 @@ class _BottomNavState extends State<BottomNav> {
         onTap: () {
           setState(() {
             _currentIndex = index;
+            if(index == 1) {
+              TeamList list = TeamList();
+              list.getTeamList(context);
+            }
           });
         },
         child: AnimatedContainer(

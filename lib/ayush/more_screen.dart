@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/Login.dart';
 import 'package:merge_capl/aman/audience/audience_accouts.dart';
 import 'package:merge_capl/ayush/results_screen.dart';
+import 'package:merge_capl/integration/api/basics_api.dart';
 
 import '../tournament.dart';
 import 'about_us.dart';
@@ -75,16 +76,8 @@ class _MorePageState extends State<MorePage> {
                         foregroundColor: Colors.grey,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AudienceAccountPage(
-                                    playerPhotoUrl: 'assets/images/profile.webp',
-                                    playerName: 'Rahul',
-                                    playerMobNumber: '74638900034',
-                                    playerEmail: 'playerEmail',
-                                    playerGender: 'Male'
-                                )));
+                       BasicsApi obj = BasicsApi();
+                       obj.getAccountAdmin(context);
                       },
                       child: _card_builder('Account'),
                     ),
