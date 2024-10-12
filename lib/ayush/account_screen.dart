@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
+import 'dart:html' as html;
+import 'package:http/http.dart' as http;
 import 'package:email_validator/email_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -38,11 +43,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  String imagePath = "";
-  String? base64String;
 
-  XFile? imageFile;
-  final ImagePicker imagePicker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final playerPhotoUrlController = TextEditingController();
   final phoneController = TextEditingController();
@@ -55,6 +56,7 @@ class _AccountPageState extends State<AccountPage> {
 
   String? type;
   String? subtype;
+  String? _uploadedImageUrl;
 
   File? _imageFile;
   Uint8List? _webImage;
@@ -90,13 +92,21 @@ class _AccountPageState extends State<AccountPage> {
   void _takePhoto(ImageSource source) async {
     if (kIsWeb) {
       final Uint8List? image = await ImagePickerWeb.getImageAsBytes();
-      setState(() {
-        _webImage = image;
-      });
-    } else {
-      final XFile? pickedFile =
-      await _mobileImagePicker.pickImage(source: source);
+      if (image != null) {
+        final blob = html.Blob([image], 'image/jpeg');
+        final file = html.File([blob], 'temp_image.jpg', {'type': 'image/jpeg'});
+        await _uploadWebImageToCloudinaryWeb(file);
+        setState(() {
+          _webImage = image;
+        });
+      }
+    }
+
+
+    else {
+      final XFile? pickedFile = await _mobileImagePicker.pickImage(source: source);
       if (pickedFile != null) {
+        await _uploadImageToCloudinaryMob(pickedFile);
         setState(() {
           _imageFile = File(pickedFile.path);
         });
@@ -161,12 +171,12 @@ class _AccountPageState extends State<AccountPage> {
                     children: [
                       CircleAvatar(
                         radius: 60,
-                        backgroundImage: _imageFile != null
-                            ? FileImage(_imageFile!)
-                            : _webImage != null
-                            ? MemoryImage(_webImage!) as ImageProvider
-                            : NetworkImage(
-                            "https://res.cloudinary.com/dxzkqjacj/image/upload/v1724853006/316605_pmn5c7.webp"),
+                        backgroundImage: widget.playerPhotoUrl.isNotEmpty
+                            ? NetworkImage(widget.playerPhotoUrl)
+                            : _uploadedImageUrl !=  null 
+                            ? NetworkImage(_uploadedImageUrl!)
+                            : AssetImage('assets/images/default.jpg') as ImageProvider,
+                        backgroundColor: Colors.transparent,
                       ),
                       Positioned(
                         bottom: 10,
@@ -564,7 +574,7 @@ class _AccountPageState extends State<AccountPage> {
                       onPressed: () {
                         PlayerMoreAccount obj = PlayerMoreAccount();
                         obj.updatePlayerAccountApi(
-                            "https://res.cloudinary.com/dxzkqjacj/image/upload/v1724853006/316605_pmn5c7.webp",
+                            _uploadedImageUrl != null ? _uploadedImageUrl! : widget.playerPhotoUrl,
                             _nameController.text,
                             _nicknameController.text,
                             phoneController.text,
@@ -662,5 +672,59 @@ class _AccountPageState extends State<AccountPage> {
         ],
       ),
     );
+  }
+  Future<void> _uploadWebImageToCloudinaryWeb(html.File imageFile) async {
+    try {
+      String cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dxzkqjacj/image/upload';
+      String uploadPreset = 'CrickAge';
+
+      // Convert html.File to FormData for Dio
+      final reader = html.FileReader();
+      reader.readAsArrayBuffer(imageFile);
+      await reader.onLoadEnd.first;
+
+      FormData formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(reader.result as List<int>, filename: imageFile.name, contentType: MediaType.parse('multipart/form-data')),
+        'upload_preset': uploadPreset,
+      });
+
+      Response response = await Dio().post(cloudinaryUrl, data: formData);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _uploadedImageUrl = response.data['secure_url'];
+          print('Uploaded Image URL: $_uploadedImageUrl');
+        });
+      } else {
+        print('Failed to upload image: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+  Future<void> _uploadImageToCloudinaryMob(XFile imageFile) async {
+    try {
+      String cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dxzkqjacj/image/upload';
+      String uploadPreset = 'CrickAge';
+
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(imageFile.path, contentType: MediaType.parse('multipart/form-data')),
+        'upload_preset': uploadPreset,
+      });
+
+      Response response = await Dio().post(cloudinaryUrl, data: formData);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _uploadedImageUrl = response.data['secure_url'];
+          print(_uploadedImageUrl);
+        });
+      } else {
+        print('Failed to upload image: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
   }
 }

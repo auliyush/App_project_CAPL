@@ -27,7 +27,7 @@ class _BowlersState extends State<Bowlers> {
   @override
   void initState() {
     super.initState();
-    _future = playerApi.getPlayerByRoleForTeam(widget.teamData.teamId, "bowler", context);
+    _future = playerApi.getPlayerByRoleForTeam(widget.teamData.teamId, "Bowler", context);
   }
 
   @override
@@ -43,7 +43,7 @@ class _BowlersState extends State<Bowlers> {
           backgroundColor: Color(0xFF3b3b6d),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "bowler",teamId: widget.teamData.teamId,)));
+                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "Bowler",teamId: widget.teamData.teamId,)));
           },
         ),
       ),

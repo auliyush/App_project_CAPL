@@ -32,7 +32,7 @@ class Player {
       players.add(Player(
         playerId: playerRole.playerId,
         name: playerRole.playerName,
-        role: "Batter",
+        role: playerRole.playerType,
         playerSpec: playerRole.playerSubType,
         playerPhoto: playerRole.playerProfilePhotoUrl,
         inTeam: playerRole.inTeam,

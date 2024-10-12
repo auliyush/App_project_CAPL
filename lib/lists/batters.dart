@@ -26,7 +26,7 @@ class _BattersState extends State<Batters> {
   @override
   void initState() {
     super.initState();
-    _future = playerApi.getPlayerByRoleForTeam(widget.teamData.teamId,"batter", context);
+    _future = playerApi.getPlayerByRoleForTeam(widget.teamData.teamId,"Batsman", context);
   }
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _BattersState extends State<Batters> {
           backgroundColor: Color(0xFF3b3b6d),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "batter", teamId: widget.teamData.teamId,)));
+                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "Batsman", teamId: widget.teamData.teamId,)));
           },
         ),
       ),

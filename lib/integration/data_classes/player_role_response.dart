@@ -14,6 +14,7 @@ class PlayerDataByRole {
   String playerName;
   String playerNickname;
   String playerProfilePhotoUrl;
+  String playerType;
   String playerSubType;
   bool inTeam;
 
@@ -22,6 +23,7 @@ class PlayerDataByRole {
     required this.playerName,
     required this.playerNickname,
     required this.playerProfilePhotoUrl,
+    required this.playerType,
     required this.playerSubType,
     required this.inTeam,
   });
@@ -33,6 +35,7 @@ class PlayerDataByRole {
       playerName: json["playerName"],
       playerNickname: json["playerNickName"],
       playerProfilePhotoUrl: json["playerProfilePhotoUrl"],
+      playerType: json["playerType"],
       playerSubType: json["playerSubType"],
       inTeam: json["inTeam"],
     );

@@ -28,7 +28,7 @@ class _AllRoundersState extends State<AllRounders> {
   void initState() {
     super.initState();
     _future = playerApi.getPlayerByRoleForTeam(
-        widget.teamData.teamId, "all-rounder", context);
+        widget.teamData.teamId, "Allrounder", context);
   }
 
   @override
@@ -44,7 +44,7 @@ class _AllRoundersState extends State<AllRounders> {
           backgroundColor: Color(0xFF3b3b6d),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "all-rounder", teamId: widget.teamData.teamId,)));
+                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "Allrounder", teamId: widget.teamData.teamId,)));
           },
         ),
       ),
