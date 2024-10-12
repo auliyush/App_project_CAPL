@@ -93,22 +93,15 @@ class _AccountPageState extends State<AccountPage> {
     if (kIsWeb) {
       final Uint8List? image = await ImagePickerWeb.getImageAsBytes();
       if (image != null) {
-        final blob = html.Blob([image], 'image/jpeg');
-        final file = html.File([blob], 'temp_image.jpg', {'type': 'image/jpeg'});
-        await _uploadWebImageToCloudinaryWeb(file);
         setState(() {
-          _webImage = image;
+          _webImage = image; // Update the local image
         });
       }
-    }
-
-
-    else {
+    } else {
       final XFile? pickedFile = await _mobileImagePicker.pickImage(source: source);
       if (pickedFile != null) {
-        await _uploadImageToCloudinaryMob(pickedFile);
         setState(() {
-          _imageFile = File(pickedFile.path);
+          _imageFile = File(pickedFile.path); // Update the local image
         });
       }
     }
@@ -171,11 +164,13 @@ class _AccountPageState extends State<AccountPage> {
                     children: [
                       CircleAvatar(
                         radius: 60,
-                        backgroundImage: widget.playerPhotoUrl.isNotEmpty
-                            ? NetworkImage(widget.playerPhotoUrl)
-                            : _uploadedImageUrl !=  null 
-                            ? NetworkImage(_uploadedImageUrl!)
-                            : AssetImage('assets/images/default.jpg') as ImageProvider,
+                        backgroundImage: _webImage != null // For web
+                            ? MemoryImage(_webImage!)
+                            : _imageFile != null // For mobile
+                            ? FileImage(_imageFile!)
+                            : (playerPhotoUrlController != null
+                            ? NetworkImage(playerPhotoUrlController.text) // Show uploaded image
+                            : AssetImage('assets/images/default.jpg') as ImageProvider),
                         backgroundColor: Colors.transparent,
                       ),
                       Positioned(
@@ -351,12 +346,6 @@ class _AccountPageState extends State<AccountPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // const Text(
-                        //   'Type:',
-                        //   style: TextStyle(
-                        //       fontSize: 18,
-                        //       fontWeight: FontWeight.bold),
-                        // ),
                         const SizedBox(height: 10),
                         Row(
                           children: [
@@ -571,7 +560,14 @@ class _AccountPageState extends State<AccountPage> {
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        if (kIsWeb && _webImage != null) {
+                          final blob = html.Blob([_webImage!], 'image/jpeg');
+                          final file = html.File([blob], 'temp_image.jpg', {'type': 'image/jpeg'});
+                          await _uploadWebImageToCloudinaryWeb(file);
+                        } else if (_imageFile != null) {
+                          await _uploadImageToCloudinaryMob(_imageFile! as XFile);
+                        }
                         PlayerMoreAccount obj = PlayerMoreAccount();
                         obj.updatePlayerAccountApi(
                             _uploadedImageUrl != null ? _uploadedImageUrl! : widget.playerPhotoUrl,
@@ -584,6 +580,7 @@ class _AccountPageState extends State<AccountPage> {
                             subtype!,
                             context
                         );
+
                       },
 
                       child: const Padding(

@@ -26,12 +26,12 @@ class _MyHomePageState extends State<MyHomePage> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              onPressed: (){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-              icon: Icon(Icons.arrow_back_ios, color: Colors.grey,),
-            ),
+            // leading: IconButton(
+            //   onPressed: (){
+            //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            //   },
+            //   icon: Icon(Icons.arrow_back_ios, color: Colors.grey,),
+            // ),
             bottom: TabBar(
               tabs: [
                 MouseRegion(

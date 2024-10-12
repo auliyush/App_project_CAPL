@@ -85,16 +85,9 @@ class PlayerMoreAccount {
 
 
       if(response.statusCode == 200){
-        final jsonData = jsonDecode(response.body);
-        print(jsonData);
-        if (jsonData['success']) {
-          Navigator.pop(context);
-        }
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('')),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('SuccessFully Updated')),
+        );
       }
       else {
         ScaffoldMessenger.of(context).showSnackBar(

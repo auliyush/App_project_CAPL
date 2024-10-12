@@ -6,7 +6,6 @@ import '../hold_models/player_list_model.dart';
 import '../hold_models/items/decorate_player.dart';
 import '../hold_models/items/player_data.dart';
 import '../integration/api/player_list.dart';
-import '../members/allrounder_screen.dart';
 import '../teams/player_list.dart';
 
 // 96 at 11:25

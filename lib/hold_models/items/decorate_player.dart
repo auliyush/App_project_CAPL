@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:merge_capl/aman/player/player_account.dart';
+import 'package:merge_capl/aman/player/player_default_account_page.dart';
 import 'player_data.dart';
 
 class DecoratePlayer extends StatelessWidget {
   final FetchedPlayerData playerData;
 
   const DecoratePlayer({
-    Key? key, required this.playerData,
+    Key? key,
+    required this.playerData,
   }) : super(key: key);
 
   @override
@@ -76,14 +75,25 @@ class DecoratePlayer extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerAccount(
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlayerDefaultAccountPage(
                               playerPhotoUrl: playerData.playerPhotoUrl,
-                              playerName: playerData.playerName!,
-                              playerMobNumber: playerData.playerNickName!,
-                              playerEmail: playerData.playerEmail!,
-                              playerGender: "MALE")));
+                              playerName: playerData.playerName,
+                              playerNickName: playerData.playerNickName,
+                              playerPhone: playerData.playerPhone,
+                              playerEmail: playerData.playerEmail,
+                              playerType: playerData.playerType,
+                              playerSubType: playerData.playerSubType,
+                              playerAddress: playerData.playerAddress,
+                              highestScore: playerData.highestScore,
+                              totalHalfCentury: playerData.totalHalfCentury,
+                              totalFullCentury: playerData.totalFullCentury,
+                              totalMatches: playerData.totalMatches,
+                              totalRuns: playerData.totalRuns,
+                              totalFours: playerData.totalFours,
+                              totalSixes: playerData.totalSixes)));
                   // todo navigate it to player profile right now not in correct profile
                 },
               ),
@@ -93,5 +103,4 @@ class DecoratePlayer extends StatelessWidget {
       ),
     );
   }
-
 }

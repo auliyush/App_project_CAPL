@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../hold_models/items/team_data.dart';
-import '../hold_models/player_list_model.dart';
 import '../hold_models/items/decorate_player.dart';
 import '../hold_models/items/player_data.dart';
 import '../integration/api/player_list.dart';
-import '../members/bowler_screen.dart';
 import '../teams/player_list.dart';
 
 // 96 at 11:25

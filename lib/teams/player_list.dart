@@ -194,14 +194,57 @@ class _PlayerListState extends State<PlayerList> {
     );
   }
 
-  Widget _buildSelectButton(int index , bool inTeamStatus) {
-    // bool isSelected = selectedPlayers[index] ?? false;
-    // bool isInTeam = selectedPlayerId.contains(Player.players[index].playerId);
-    if (inTeamStatus) {
+  // Widget _buildSelectButton(int index , bool inTeamStatus) {
+  //   bool isSelected = selectedPlayers[index] ?? false;
+  //   // bool isInTeam = selectedPlayerId.contains(Player.players[index].playerId);
+  //   if (!inTeamStatus) {
+  //     return ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         foregroundColor: Colors.white,
+  //         backgroundColor: isSelected ? Colors.indigo.shade900 : Colors.grey,
+  //         elevation: 0,
+  //         padding: EdgeInsets.all(10),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //       ),
+  //       onPressed: isSelected
+  //           ? null
+  //           : () {
+  //         setState(() {
+  //           selectedPlayers[index] = !isSelected;
+  //         });
+  //       },
+  //       child: Text(isSelected ? 'Selected' : 'Select'),
+  //     );
+  //   }
+  //   else {
+  //     return ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         foregroundColor: Colors.white,
+  //         backgroundColor: Colors.indigo.shade900,
+  //         elevation: 0,
+  //         padding: EdgeInsets.all(10),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //       ),
+  //       onPressed:(){},
+  //       child: Text('Selected'),
+  //     );
+  //   }
+  // }
+
+
+  Widget _buildSelectButton(int index, bool inTeamStatus) {
+    bool isSelected = selectedPlayers[index] ?? false;
+    if(!inTeamStatus){
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: inTeamStatus ? Colors.grey : Colors.indigo.shade900,
+          backgroundColor: inTeamStatus
+              ? Colors.indigo.shade900
+              : (isSelected ? Colors.indigo.shade900 : Colors.grey),
           elevation: 0,
           padding: EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
@@ -209,16 +252,16 @@ class _PlayerListState extends State<PlayerList> {
           ),
         ),
         onPressed: inTeamStatus
-            ? null
+            ? null // If the player is already in the team, the button is disabled
             : () {
+          // Toggle selection when the player is not in the team
           setState(() {
-            selectedPlayers[index] = !inTeamStatus;
+            selectedPlayers[index] = !isSelected;
           });
         },
-        child: Text(inTeamStatus ? 'Selected' : 'Select'),
+        child: Text(inTeamStatus || isSelected ? 'Selected' : 'Select'),
       );
-    }
-    else {
+    }else{
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
@@ -234,6 +277,7 @@ class _PlayerListState extends State<PlayerList> {
       );
     }
   }
+
 
   Widget _buildApplyButton() {
     return Padding(

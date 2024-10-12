@@ -30,31 +30,24 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RemoveBgApi remove = RemoveBgApi();
 
-
   void _takePhoto(ImageSource source) async {
     if (kIsWeb) {
       final Uint8List? image = await ImagePickerWeb.getImageAsBytes();
       if (image != null) {
-        final blob = html.Blob([image], 'image/jpeg');
-        final file = html.File([blob], 'temp_image.jpg', {'type': 'image/jpeg'});
-        await _uploadWebImageToCloudinaryWeb(file);
         setState(() {
-          _webImage = image;
+          _webImage = image; // Update the local image
         });
       }
-    }
-
-
-    else {
+    } else {
       final XFile? pickedFile = await _mobileImagePicker.pickImage(source: source);
       if (pickedFile != null) {
-        await _uploadImageToCloudinaryMob(pickedFile);
         setState(() {
-          _imageFile = File(pickedFile.path);
+          _imageFile = File(pickedFile.path); // Update the local image
         });
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,13 +109,15 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                         children: [
                           CircleAvatar(
                             radius: 60,
-                            backgroundImage: _uploadedImageUrl != null // Check if a Cloudinary URL is available
-                                ? NetworkImage(_uploadedImageUrl!) // Display the image from Cloudinary
-                                : AssetImage('assets/images/default.jpg') as ImageProvider, // Default image from assets
-                            backgroundColor: Colors.transparent, // Set a transparent background for the avatar
+                            backgroundImage: _webImage != null // For web
+                                ? MemoryImage(_webImage!)
+                                : _imageFile != null // For mobile
+                                ? FileImage(_imageFile!)
+                                : (_uploadedImageUrl != null
+                                ? NetworkImage(_uploadedImageUrl!) // Show uploaded image
+                                : AssetImage('assets/images/default.jpg') as ImageProvider),
+                            backgroundColor: Colors.transparent,
                           ),
-
-
                           Positioned(
                             bottom: 10,
                             right: 15,
@@ -250,18 +245,34 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                 minimumSize:
                                     Size(constraints.maxWidth * 0.9, 40),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  BasicsApi service = BasicsApi();
-                                  service.createTeam(
+                                  // Upload the image to Cloudinary
+                                  String? uploadedUrl;
+                                  if (kIsWeb && _webImage != null) {
+                                    final blob = html.Blob([_webImage!], 'image/jpeg');
+                                    final file = html.File([blob], 'temp_image.jpg', {'type': 'image/jpeg'});
+                                    await _uploadWebImageToCloudinaryWeb(file);
+                                  } else if (_imageFile != null) {
+                                    await _uploadImageToCloudinaryMob(_imageFile! as XFile);
+                                  }
+                                    // Create the team using the uploaded image URL
+                                    BasicsApi service = BasicsApi();
+                                    service.createTeam(
                                       _teamNameController.text,
                                       _teamNicknameController.text,
                                       _uploadedImageUrl!,
-                                      context
-                                  );
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeamScreen()));
-                                }
-                              },
+                                      context,
+                                    );
+
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeamScreen()));
+                                  } else {
+                                    // Handle image upload failure
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Image upload failed. Please try again.')),
+                                    );
+                                  }
+                                },
                               child: Text(
                                 'Save Team',
                                 style: TextStyle(
@@ -409,4 +420,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
       print('Error uploading image: $e');
     }
   }
+
+
+
 }

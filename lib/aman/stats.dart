@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merge_capl/aman/player/players_details.dart';
 import '../Login.dart';
+import '../home.dart';
 import 'player/about_player_details_page.dart';
 import 'extra.dart';
 import 'floate_button.dart';
@@ -81,7 +82,6 @@ class _StatsState extends State<Stats> {
                       ),
                     ),
                   ),
-
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     child: Row(
@@ -100,7 +100,7 @@ class _StatsState extends State<Stats> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
+                                      builder: (context) => MyHomePage()));
                             },
                           ),
                         ),
