@@ -2,12 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:merge_capl/hold_models/items/decorate_team.dart';
-import 'package:provider/provider.dart';
-import '../../hold_models/items/team_data.dart';
-import '../data_classes/team_response.dart';
-import '../providers/login_provider.dart';
 import '../providers/teamId_provider.dart';
+import '../response_classes/team_data.dart';
 
 class TeamList {
   final getTeamListUrl = "http://localhost:8080/capl/team/listOf/Teams";

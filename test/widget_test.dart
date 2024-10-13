@@ -7,8 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:merge_capl/integration/api/try.dart';
 
-import 'package:merge_capl/ayush/try.dart';
+import 'package:merge_capl/ayush_complete_new.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

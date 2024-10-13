@@ -1,7 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:merge_capl/integration/data_classes/admin_get_response.dart';
-import 'package:merge_capl/integration/data_classes/login_response.dart';
+
+import '../response_classes/admin_get_response.dart';
+import '../response_classes/login_response.dart';
 
 class LoginProvider with ChangeNotifier{
   LoginResponse? _loginResponse;

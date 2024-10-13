@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:merge_capl/hold_models/player_list_model.dart';
-import 'package:merge_capl/splashScreen.dart';
+import 'package:merge_capl/start/splashScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'integration/providers/login_provider.dart';
@@ -10,7 +9,6 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LoginProvider()),
-        ChangeNotifierProvider(create: (context) => ListModel()),
         ChangeNotifierProvider(create: (context) => TeamIdProvider()), // Add this line
       ],
       child: MyApp(),

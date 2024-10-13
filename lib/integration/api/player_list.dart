@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import '../../ayush/account_screen.dart';
-import '../../hold_models/items/player_data.dart';
-import '../../teams/player_list.dart';
-import '../data_classes/player_data_model.dart';
-import '../data_classes/player_role_response.dart';
+import '../../adminScreens/teamScreens/teamPlayersScreens/playerListScreens/player_list.dart';
+import '../../player_screens/player_update_account_screen.dart';
 import '../providers/login_provider.dart';
+import '../response_classes/player_data.dart';
+import '../response_classes/player_data_model.dart';
+import '../response_classes/player_role_response.dart';
 
 class PlayerApi {
 
@@ -136,7 +136,7 @@ class PlayerApi {
         final jsonData = jsonDecode(response.body);
         final playerDataModel = PlayerDataModel.fromJson(jsonData);
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            AccountPage(
+            PlayerUpdateAccountScreen(
               playerPhotoUrl: playerDataModel.playerPhotoUrl,
               playerName: playerDataModel.playerName,
               playerMobNumber: playerDataModel.playerMobNumber,

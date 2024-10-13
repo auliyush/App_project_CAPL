@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
-import '../data_classes/team_response.dart';
+import '../response_classes/team_response.dart';
 
 class TeamIdProvider with ChangeNotifier {
 

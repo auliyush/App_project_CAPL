@@ -3,41 +3,40 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:merge_capl/ayush/account_screen.dart';
+import 'package:merge_capl/player_screens/player_update_account_screen.dart';
 import 'package:provider/provider.dart';
-
-import '../data_classes/player_data_model.dart';
 import '../providers/login_provider.dart';
+import '../response_classes/player_data_model.dart';
 
 class PlayerMoreAccount {
-
-  final String getPlayerAccountUrl = "http://localhost:8080/capl/player/get/player";
+  final String getPlayerAccountUrl =
+      "http://localhost:8080/capl/player/get/player";
   static String playerPassword = '';
-  final String updatePlayerAccountUrl = 'http://localhost:8080/capl/player/update/profile';
-
-  // LoginProvider obj = LoginProvider();
+  final String updatePlayerAccountUrl =
+      'http://localhost:8080/capl/player/update/profile';
 
   Future<PlayerDataModel?> playerDataApi(BuildContext context) async {
     final counter = Provider.of<LoginProvider>(context, listen: false);
     try {
       final response = await http.get(Uri.parse(getPlayerAccountUrl).replace(
           queryParameters: {"playerId": counter.loginResponse?.creatorId}));
-      print(counter.loginResponse?.creatorId);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final playerDataModel = PlayerDataModel.fromJson(jsonData);
         playerPassword = playerDataModel.playerPassword;
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            AccountPage(
-              playerPhotoUrl: playerDataModel.playerPhotoUrl,
-              playerName: playerDataModel.playerName,
-              playerMobNumber: playerDataModel.playerMobNumber,
-              playerEmail: playerDataModel.playerEmail,
-              playerAddress: playerDataModel.address,
-              playerNickName: playerDataModel.playerNickName,
-              playerType: playerDataModel.playerType,
-              playerSubType: playerDataModel.playerSubType,
-            )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PlayerUpdateAccountScreen(
+                      playerPhotoUrl: playerDataModel.playerPhotoUrl,
+                      playerName: playerDataModel.playerName,
+                      playerMobNumber: playerDataModel.playerMobNumber,
+                      playerEmail: playerDataModel.playerEmail,
+                      playerAddress: playerDataModel.address,
+                      playerNickName: playerDataModel.playerNickName,
+                      playerType: playerDataModel.playerType,
+                      playerSubType: playerDataModel.playerSubType,
+                    )));
       }
     } on http.ClientException catch (e) {
       ScaffoldMessenger.of(context)
@@ -57,9 +56,17 @@ class PlayerMoreAccount {
     }
     return null;
   }
-  Future<void> updatePlayerAccountApi(String playerPhotoUrl, String playerName,
-      String playerNickName, String playerMobNumber, String playerEmail,
-      String address, String playerType, String playerSubType , BuildContext context) async {
+
+  Future<void> updatePlayerAccountApi(
+      String playerPhotoUrl,
+      String playerName,
+      String playerNickName,
+      String playerMobNumber,
+      String playerEmail,
+      String address,
+      String playerType,
+      String playerSubType,
+      BuildContext context) async {
     try {
       final counter = Provider.of<LoginProvider>(context, listen: false);
 
@@ -79,23 +86,18 @@ class PlayerMoreAccount {
             "playerAddress": address,
             "playerType": playerType,
             "playerSubType": playerSubType
-          })
-      );
+          }));
 
-
-
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('SuccessFully Updated')),
         );
-      }
-      else {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Server error: ${response.statusCode}')),
         );
       }
-    }
-    on http.ClientException catch (e) {
+    } on http.ClientException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Network error: $e')),
       );
