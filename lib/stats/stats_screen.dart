@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:merge_capl/integration/api/api_services.dart';
+import 'package:merge_capl/integration/api/try.dart';
 import 'package:merge_capl/stats/float_season_screen.dart';
 import 'package:merge_capl/stats/player_list_rank.dart';
 import 'package:merge_capl/stats/player_profile_page.dart';
@@ -98,10 +100,8 @@ class _StatsState extends State<Stats> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AdminBottomNav()));
+                            ApiServices obj = ApiServices();
+                            obj.navigateToBottomNav(context);
                           },
                         ),
                       ),

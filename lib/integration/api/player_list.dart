@@ -92,7 +92,7 @@ class PlayerApi {
 
   Future<void> addPlayerInTeam(List<String> playerId, String teamId, BuildContext context) async {
     try {
-      print(Provider.of<LoginProvider>(context, listen: false).loginResponse?.creatorId);
+      print(Provider.of<LoginProvider>(context, listen: false).loginResponse?.signInId);
       final headers = {
         'Content-Type': 'application/json',
       };
@@ -100,7 +100,7 @@ class PlayerApi {
       final body = jsonEncode({
         "teamId" : teamId,
         "players" : playerId,
-        "creatorId" :Provider.of<LoginProvider>(context, listen: false).loginResponse?.creatorId
+        "creatorId" :Provider.of<LoginProvider>(context, listen: false).loginResponse?.signInId
       });
 
       final response = await http.put(Uri.parse(addPlayerInTeamUrl), headers: headers, body: body);
@@ -131,7 +131,7 @@ class PlayerApi {
     final counter = Provider.of<LoginProvider>(context, listen: false);
     try {
       final response = await http.get(Uri.parse(getPlayerAccountUrl).replace(
-          queryParameters: {"playerId": counter.loginResponse?.creatorId}));
+          queryParameters: {"playerId": counter.loginResponse?.signInId}));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final playerDataModel = PlayerDataModel.fromJson(jsonData);

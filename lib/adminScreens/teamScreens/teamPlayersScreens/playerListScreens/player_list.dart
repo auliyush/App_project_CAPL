@@ -13,7 +13,6 @@ class Player {
   final String role;
   final String playerSpec;
   final bool inTeam;
-
   Player({
     required this.playerId,
     required this.name,
@@ -70,10 +69,7 @@ class _PlayerListState extends State<PlayerList> {
   void _fetchPlayerData() {
     if (selectedPlayers.containsValue(true)) {
       Player.players.clear();
-      // selectedPlayers.clear();
     }
-
-    // Fetch new data from the server
     setState(() {
       playerRoleResponseFuture = api.getPlayerListByRole(widget.playerType!, context);
     });

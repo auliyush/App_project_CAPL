@@ -19,7 +19,7 @@ class PlayerMoreAccount {
     final counter = Provider.of<LoginProvider>(context, listen: false);
     try {
       final response = await http.get(Uri.parse(getPlayerAccountUrl).replace(
-          queryParameters: {"playerId": counter.loginResponse?.creatorId}));
+          queryParameters: {"playerId": counter.loginResponse?.signInId}));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final playerDataModel = PlayerDataModel.fromJson(jsonData);
@@ -75,7 +75,7 @@ class PlayerMoreAccount {
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            "playerId": counter.loginResponse?.creatorId,
+            "playerId": counter.loginResponse?.signInId,
             "playerProfilePhotoUrl": playerPhotoUrl,
             "playerName": playerName,
             "playerNickName": playerNickName,

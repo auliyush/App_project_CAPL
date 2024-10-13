@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/integration/api/api_services.dart';
+import 'package:merge_capl/start/Login.dart';
 import '../../more_screens/about_us.dart';
 import '../../more_screens/feedback_screen.dart';
 import '../../more_screens/results_screen.dart';
-import 'admin_tournament.dart';
+import 'tournament_screens/create_tournament_screen.dart';
 import '../admin_bottom_nav.dart';
 
 class AdminMorePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _AdminMorePageState extends State<AdminMorePage> {
             // background image
             Container(
               height: 130,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/bg.jpg'),
                   fit: BoxFit.cover,
@@ -142,8 +143,8 @@ class _AdminMorePageState extends State<AdminMorePage> {
                 },
                 child: _cardBuilder('FeedBack'),
               ),
-              // FeedBack button
 
+              // FeedBack button
               const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -156,9 +157,26 @@ class _AdminMorePageState extends State<AdminMorePage> {
                 ),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Tournament()));
+                      MaterialPageRoute(builder: (context) => const CreateTournament()));
                 },
                 child: _cardBuilder('Tournament'),
+              ),
+
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white70,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  surfaceTintColor: Colors.white,
+                  foregroundColor: Colors.grey,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                },
+                child: _cardBuilder('Log out'),
               ),
               // Tournament Button
             ],

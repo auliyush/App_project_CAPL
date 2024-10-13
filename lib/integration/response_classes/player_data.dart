@@ -26,12 +26,12 @@ class FetchedPlayerData {
     required this.playerSubType,
     required this.playerAddress,
     required this.highestScore,
-    required this. totalHalfCentury,
-    required this. totalFullCentury,
-    required this. totalMatches,
-    required this. totalRuns,
-    required this. totalSixes,
-    required this. totalFours,
+    required this.totalHalfCentury,
+    required this.totalFullCentury,
+    required this.totalMatches,
+    required this.totalRuns,
+    required this.totalSixes,
+    required this.totalFours,
   });
 
   factory FetchedPlayerData.fromJson(Map<String, dynamic> jsonData) {
@@ -53,18 +53,4 @@ class FetchedPlayerData {
       totalSixes: jsonData["totalSixes"],
     );
   }
-}
-
-class PlayerData {
-  String playerPhotoUrl;
-  String? playerName;
-  String? playerNickName;
-
-  PlayerData({
-    required this.playerPhotoUrl,
-    required this.playerName,
-    required this.playerNickName,
-  });
-
-
 }

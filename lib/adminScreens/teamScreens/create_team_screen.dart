@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:merge_capl/integration/api/api_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';

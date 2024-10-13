@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/adminScreens/teamScreens/teamPlayersScreens/player_card_page.dart';
 import 'package:merge_capl/adminScreens/teamScreens/teamPlayersScreens/playerListScreens/player_list.dart';
+import 'package:provider/provider.dart';
 
 import '../../../integration/api/player_list.dart';
+import '../../../integration/providers/login_provider.dart';
 import '../../../integration/response_classes/player_data.dart';
 import '../../../integration/response_classes/team_data.dart';
 
@@ -27,22 +29,8 @@ class _BattersState extends State<Batters> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 15),
-        child: FloatingActionButton(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          backgroundColor: Color(0xFF3b3b6d),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PlayerList(
-              playerType: "Batsman", teamId: widget.teamData.teamId,)));
-          },
-        ),
-      ),
-      body:  Padding(
+      floatingActionButton: _buildAddButton(widget.teamData.teamCreatorId),
+      body: Padding(
         padding: const EdgeInsets.only(top: 18.0),
         child: Container(
           width: double.infinity,
@@ -65,7 +53,9 @@ class _BattersState extends State<Batters> {
                       physics: ClampingScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return DecoratePlayer(playerData: snapshot.data![index],);
+                        return DecoratePlayer(
+                          playerData: snapshot.data![index],
+                        );
                       },
                     );
                   } else {
@@ -84,6 +74,31 @@ class _BattersState extends State<Batters> {
     );
   }
 
-  /// todo work is that i have to complete add player in team first then do it
 
+  Widget? _buildAddButton(String teamCreatorId) {
+    String? loggedId = Provider.of<LoginProvider>
+      (context, listen: false).loginResponse?.signInId;
+    if(loggedId == teamCreatorId){
+      return FloatingActionButton(
+        backgroundColor: const Color(0xFF3b3b6d),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PlayerList(
+                    playerType: "Batsman",
+                    teamId: widget.teamData.teamId,
+                  )));
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      );
+    }else
+      {
+        return null;
+      }
+
+  }
 }

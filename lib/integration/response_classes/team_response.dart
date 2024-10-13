@@ -1,16 +1,17 @@
 
-class TeamResponse {
-
-}
-
-
-
 class TeamId {
   String teamId;
-  TeamId({required this.teamId});
+  String teamCreatorId;
+  TeamId({
+    required this.teamId,
+    required this.teamCreatorId
+  });
 
   factory TeamId.fromJson(Map<String, dynamic> jsonData) {
-    return TeamId(teamId: jsonData["teamId"]);
+    return TeamId(
+        teamId: jsonData["teamId"],
+        teamCreatorId: jsonData["teamCreatorId"]
+    );
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../integration/api/player_list.dart';
+import '../../../integration/providers/login_provider.dart';
 import '../../../integration/response_classes/player_data.dart';
 import '../../../integration/response_classes/team_data.dart';
 import 'player_card_page.dart';
@@ -27,25 +29,12 @@ class _BowlersState extends State<Bowlers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 15),
-        child: FloatingActionButton(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          backgroundColor: Color(0xFF3b3b6d),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PlayerList(playerType: "Bowler",teamId: widget.teamData.teamId,)));
-          },
-        ),
-      ),
+      floatingActionButton: _buildAddButton(widget.teamData.teamCreatorId),
       body: Padding(
         padding: const EdgeInsets.only(top: 18.0),
         child: Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white24,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(35),
@@ -81,5 +70,32 @@ class _BowlersState extends State<Bowlers> {
         ),
       ),
     );
+  }
+
+  Widget? _buildAddButton(String teamCreatorId) {
+    String? loggedId = Provider.of<LoginProvider>
+      (context, listen: false).loginResponse?.signInId;
+    if(loggedId == teamCreatorId){
+      return FloatingActionButton(
+        backgroundColor: const Color(0xFF3b3b6d),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PlayerList(
+                    playerType: "Batsman",
+                    teamId: widget.teamData.teamId,
+                  )));
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      );
+    }else
+    {
+      return null;
+    }
+
   }
 }

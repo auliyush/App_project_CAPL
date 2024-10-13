@@ -93,7 +93,7 @@ class ApiServices {
         final jsonData = jsonDecode(response.body);
         final loginResponse = LoginResponse.fromJson(jsonData);
         Provider.of<LoginProvider>(context, listen: false).updateLoginResponse(loginResponse);
-        loggedId = loginResponse.creatorId;
+        loggedId = loginResponse.signInId;
         loggedRole = loginResponse.role;
         if (loginResponse.role.toLowerCase() == "admin") {
           getUserId(phoneNumber, password);
@@ -293,6 +293,20 @@ class ApiServices {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An unknown error occurred. Please try again.')),
       );// rethrow the exception
+    }
+  }
+
+  void navigateToBottomNav(BuildContext context) {
+    if(loggedRole?.toLowerCase() == "admin") {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AdminBottomNav()));
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UserBottomNav()));
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:merge_capl/navigation/bottom_nav_screen.dart';
 import 'package:merge_capl/start/Login.dart';
 
 
@@ -42,7 +43,7 @@ class _TeamScreenState extends State<PlayerTeamScreen> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserBottomNav()));
                     },
                   ),
                 ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/adminScreens/admin_bottom_nav.dart';
 import 'package:merge_capl/integration/api/team_list.dart';
-
-import '../../start/Login.dart';
 import '../../integration/response_classes/team_data.dart';
 import 'team_card_page.dart';
 import 'create_team_screen.dart';
