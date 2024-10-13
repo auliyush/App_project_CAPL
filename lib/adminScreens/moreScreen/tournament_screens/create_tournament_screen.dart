@@ -15,9 +15,11 @@ class _CreateTournamentState extends State<CreateTournament> {
   final _formKey = GlobalKey<FormState>();
   final _tournamentNameController = TextEditingController();
   final _stadiumNameController = TextEditingController();
-  final _stadiumAddressController = TextEditingController();
   final _adminNameController = TextEditingController();
   final _numberOfTeamsController = TextEditingController();
+  final stateController = TextEditingController();
+  final cityController = TextEditingController();
+  final pinCodeController = TextEditingController();
 
   DateTime? _tournamentDate;
   List<String> _selectedTeams = [];
@@ -26,8 +28,10 @@ class _CreateTournamentState extends State<CreateTournament> {
   void dispose() {
     _tournamentNameController.dispose();
     _stadiumNameController.dispose();
-    _stadiumAddressController.dispose();
     _adminNameController.dispose();
+    stateController.dispose();
+    cityController.dispose();
+    pinCodeController.dispose();
     _numberOfTeamsController.dispose();
     super.dispose();
   }
@@ -126,7 +130,11 @@ class _CreateTournamentState extends State<CreateTournament> {
                     const SizedBox(height: 20),
                     _buildTextField(_stadiumNameController, 'Stadium Name *'),
                     const SizedBox(height: 20),
-                    _buildTextField(_stadiumAddressController, 'Stadium Address *'),
+                    _buildTextField(cityController, 'City *'),
+                    const SizedBox(height: 20),
+                    _buildTextField(stateController, ' State *'),
+                    const SizedBox(height: 20),
+                    _buildTextField(pinCodeController, 'Pin-Code *'),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

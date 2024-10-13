@@ -67,118 +67,53 @@ class _AdminMorePageState extends State<AdminMorePage> {
             ),
           ],
         ),
-
-        SingleChildScrollView(
-          child: Column(
+        SizedBox(height: 20),
+        Expanded(
+          child: ListView(
             children: [
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  ApiServices obj = ApiServices();
-                  obj.navigateToAccounts(context);
+              _buildCard(
+                title: "Account",
+                icon: Icons.person,
+                onTap: () {
+                  ApiServices api = ApiServices();
+                  api.navigateToAccounts(context);
                 },
-                child: _cardBuilder('Account'),
               ),
-              // Account button
-
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) =>  ResultScreen()));
+              _buildCard(
+                  title: 'Tournament',
+                  icon: Icons.touch_app,
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTournament()));
+                  }
+              ),
+              _buildCard(
+                title: "Results",
+                icon: Icons.score,
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  ResultScreen()));
                 },
-                child: _cardBuilder('Results'),
               ),
-              // Results Button
-
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AboutUsScreen()));
+              _buildCard(
+                title: "About Us",
+                icon: Icons.info,
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AboutUsScreen()));
                 },
-                child: _cardBuilder('About Us'),
               ),
-              // About us button
-
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FeedBackScreen()));
+              _buildCard(
+                title: "Feedback",
+                icon: Icons.feedback,
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedBackScreen()));
                 },
-                child: _cardBuilder('FeedBack'),
               ),
-
-              // FeedBack button
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const CreateTournament()));
+              _buildCard(
+                title: "Log-out",
+                icon: Icons.logout,
+                onTap: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
-                child: _cardBuilder('Tournament'),
               ),
-
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  surfaceTintColor: Colors.white,
-                  foregroundColor: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                },
-                child: _cardBuilder('Log out'),
-              ),
-              // Tournament Button
             ],
           ),
         ),
@@ -186,32 +121,49 @@ class _AdminMorePageState extends State<AdminMorePage> {
     ));
   }
 
-  // buttons Card decorator method
-  Widget _cardBuilder(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16.0, bottom: 16, left: 0, right: 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(width: 0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 19,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+  Widget _buildCard({
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        elevation: 7,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10,right: 10,top: 7,bottom: 7),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                child: Icon(
+                  icon,
+                  size: 30,
+                ),
+                backgroundColor: Colors.white54,
               ),
-            ),
-          ],
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.deepPurple[900],
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.deepPurple,
+              ),
+            ],
+          ),
         ),
       ),
     );

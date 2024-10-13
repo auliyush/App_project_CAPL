@@ -49,5 +49,37 @@ class TournamentApiService {
     }
   }
 
+  // Future<void> createTournament(String tournamentName, String teamNickName, String teamPhotoUrl, BuildContext context) async {
+  //   try {
+  //     final response = await http.post(Uri.parse(createTeamUrl),
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: jsonEncode({
+  //           "teamCreatorId": loggedId,
+  //           "teamName": tournamentName,
+  //           "teamNickName": teamNickName,
+  //           "teamProfilePhotoUrl" : teamPhotoUrl
+  //         }));
+  //
+  //     if (response.statusCode == 200) {
+  //       Navigator.pop(context);
+  //     }
+  //   } on http.ClientException catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Network error: $e')),
+  //     );// rethrow the exception
+  //   } on FormatException catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Invalid response from server')),
+  //     );// rethrow the exception
+  //   } catch (e) {
+  //     print('Unknown Error: $e'); // log the error
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('An unknown error occurred. Please try again.')),
+  //     );// rethrow the exception
+  //   }
+  // }
+
 
 }
