@@ -182,7 +182,7 @@ class _CreateMatchState extends State<CreateMatch> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange,
+                        color: Colors.green,
                       ),
                     ),
                     Row(
@@ -222,7 +222,7 @@ class _CreateMatchState extends State<CreateMatch> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange,
+                        color: Colors.green,
                       ),
                     ),
                     Row(
@@ -263,7 +263,7 @@ class _CreateMatchState extends State<CreateMatch> {
                       decoration: const InputDecoration(
                         labelText: 'Overs?',
                         labelStyle: TextStyle(
-                            color: Colors.orange,
+                            color: Colors.green,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
@@ -282,7 +282,7 @@ class _CreateMatchState extends State<CreateMatch> {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.orange),
+                          color: Colors.green),
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -304,7 +304,7 @@ class _CreateMatchState extends State<CreateMatch> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade900,
+                              backgroundColor: Colors.blue.shade500,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -335,7 +335,7 @@ class _CreateMatchState extends State<CreateMatch> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade900,
+                              backgroundColor: Colors.blue.shade500,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -360,7 +360,7 @@ class _CreateMatchState extends State<CreateMatch> {
                         ElevatedButton(
                           onPressed: _validateAndProceed,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade300,
+                            backgroundColor: Colors.blue.shade900,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),

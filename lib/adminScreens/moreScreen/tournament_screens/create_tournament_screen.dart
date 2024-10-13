@@ -155,7 +155,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => AdminBottomNav()),
+                                MaterialPageRoute(builder: (context) => AddTeamsTournament()),
                               );
                             },
                             style: ElevatedButton.styleFrom(

@@ -11,6 +11,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
+import '../integration/api/RemoveBgApi.dart';
 import '../integration/api/player_list.dart';
 import '../integration/api/player_more_screen.dart';
 
@@ -86,23 +87,35 @@ class _PlayerUpdateAccountScreenState extends State<PlayerUpdateAccountScreen> {
     _playerSubTypeController.dispose();
     super.dispose();
   }
-
+  RemoveBgApi remove = RemoveBgApi();
   // done
   void _takePhoto(ImageSource source) async {
     if (kIsWeb) {
       final Uint8List? image = await ImagePickerWeb.getImageAsBytes();
       if (image != null) {
+        final Uint8List bgRemovedImage = await remove.removeBg(image);
         setState(() {
-          _webImage = image; // Update the local image
+          _webImage = bgRemovedImage;
         });
       }
     } else {
       final XFile? pickedFile = await _mobileImagePicker.pickImage(source: source);
       if (pickedFile != null) {
+        final Uint8List bgRemovedImage = await remove.removeBgFromPath(pickedFile.path);
         setState(() {
-          _imageFile = File(pickedFile.path); // Update the local image
+          _imageFile = File(pickedFile.path);
         });
       }
+    }
+  }
+
+  Future<Uint8List> removeBg(dynamic image) async {
+    if (image is String) {
+      return await remove.removeBgFromPath(image);
+    } else if (image is Uint8List) {
+      return await remove.removeBg(image);
+    } else {
+      throw Exception("Unsupported image type");
     }
   }
 
