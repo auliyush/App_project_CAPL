@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/adminScreens/admin_bottom_nav.dart';
 import 'package:merge_capl/adminScreens/moreScreen/tournament_screens/add_teams_tournament.dart';
 import 'package:merge_capl/adminScreens/teamScreens/create_team_screen.dart';
+import 'package:merge_capl/integration/api/tournament_api_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class CreateTournament extends StatefulWidget {
@@ -21,7 +22,9 @@ class _CreateTournamentState extends State<CreateTournament> {
   final cityController = TextEditingController();
   final pinCodeController = TextEditingController();
 
-  DateTime? _tournamentDate;
+  DateTime? _tournamentStartDate;
+  DateTime? _tournamentEndDate;
+
   List<String> _selectedTeams = [];
 
   @override
@@ -36,16 +39,29 @@ class _CreateTournamentState extends State<CreateTournament> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != _tournamentDate) {
+    if (picked != null && picked != _tournamentStartDate) {
       setState(() {
-        _tournamentDate = picked;
+        _tournamentStartDate = picked;
+      });
+    }
+  }
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _tournamentEndDate) {
+      setState(() {
+        _tournamentEndDate = picked;
       });
     }
   }
@@ -67,8 +83,16 @@ class _CreateTournamentState extends State<CreateTournament> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    String? startDateString = _tournamentStartDate?.toIso8601String();
+    String? endDateString = _tournamentEndDate?.toIso8601String();
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     final isSmallScreen = screenWidth < 600;
 
     return Scaffold(
@@ -103,7 +127,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 18, top: isSmallScreen ? 60 : 80),
+                    padding: EdgeInsets.only(
+                        left: 18, top: isSmallScreen ? 60 : 80),
                     child: Text(
                       "Create Your Tournament",
                       style: TextStyle(
@@ -117,7 +142,8 @@ class _CreateTournamentState extends State<CreateTournament> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: isSmallScreen ? 16 : 50),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isSmallScreen ? 16 : 50),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -126,7 +152,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                     const SizedBox(height: 20),
                     _buildTextField(_adminNameController, 'Admin Name *'),
                     const SizedBox(height: 20),
-                    _buildTextField(_tournamentNameController, 'Tournament / Series Name *'),
+                    _buildTextField(_tournamentNameController,
+                        'Tournament / Series Name *'),
                     const SizedBox(height: 20),
                     _buildTextField(_stadiumNameController, 'Stadium Name *'),
                     const SizedBox(height: 20),
@@ -163,7 +190,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => AddTeamsTournament()),
+                                MaterialPageRoute(
+                                    builder: (context) => AddTeamsTournament()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -172,7 +200,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                             ),
-                            child: const Text('Add Teams', style: TextStyle(color: Colors.white)),
+                            child: const Text('Add Teams',
+                                style: TextStyle(color: Colors.white)),
                           ),
                         )
                       ],
@@ -187,20 +216,44 @@ class _CreateTournamentState extends State<CreateTournament> {
                           color: Colors.blueGrey),
                     ),
                     const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () => _selectDate(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3b3b6d),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => _selectStartDate(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF3b3b6d),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: Text(
+                            _tournamentStartDate != null
+                                ? '${_tournamentStartDate!
+                                .day}/${_tournamentStartDate!
+                                .month}/${_tournamentStartDate!.year}'
+                                : 'Select Start Date *',
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        _tournamentDate != null
-                            ? '${_tournamentDate!.day}/${_tournamentDate!.month}/${_tournamentDate!.year}'
-                            : 'Select Date *',
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                        ElevatedButton(
+                          onPressed: () => _selectEndDate(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF3b3b6d),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: Text(
+                            _tournamentEndDate != null
+                                ? '${_tournamentEndDate!
+                                .day}/${_tournamentEndDate!
+                                .month}/${_tournamentEndDate!.year}'
+                                : 'Select End Date *',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 30),
                     Align(
@@ -209,7 +262,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                         transform: Matrix4.skewX(-0.2),
                         child: ElevatedButton(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 15 , right: 15),
+                            padding: const EdgeInsets.only(left: 15, right: 15),
                             child: Text(
                               'Submit',
                               style: TextStyle(
@@ -234,21 +287,26 @@ class _CreateTournamentState extends State<CreateTournament> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              if (_selectedTeams.length != int.parse(_numberOfTeamsController.text)) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Please select exactly ${_numberOfTeamsController.text} teams'),
-                                  ),
-                                );
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CreateTournament(),
-                                  ),
-                                );
-                              }
+                              // if (_selectedTeams.length !=
+                              //     int.parse(_numberOfTeamsController.text)) {
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //     SnackBar(
+                              //       content: Text(
+                              //           'Please select exactly ${_numberOfTeamsController
+                              //               .text} teams'),
+                              //     ),
+                              //   );
+                              // } else {
+                              //   /// here i have to call an api of create tournament
+                                TournamentApiService service = TournamentApiService();
+                                service.createTournament(
+                                    _tournamentNameController.text,
+                                    startDateString!,
+                                    endDateString!,
+                                    _stadiumNameController.text,
+                                    '${cityController.text} ${stateController.text} ${pinCodeController.text} ',
+                                    context);
+                              // }
                             }
                           },
                         ),
