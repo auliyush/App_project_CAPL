@@ -5,6 +5,9 @@ import 'package:merge_capl/adminScreens/teamScreens/create_team_screen.dart';
 import 'package:merge_capl/integration/api/tournament_api_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../integration/api/team_list.dart';
+import '../../../integration/response_classes/team_data.dart';
+
 class CreateTournament extends StatefulWidget {
   const CreateTournament({Key? key}) : super(key: key);
 
@@ -24,8 +27,18 @@ class _CreateTournamentState extends State<CreateTournament> {
 
   DateTime? _tournamentStartDate;
   DateTime? _tournamentEndDate;
+  late Future<List<TeamData>?> _future;
+  TeamList list = TeamList();
 
-  List<String> _selectedTeams = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _future = list.getTeamList(context);
+    // todo think about you can give this future variable to next class
+    //  therefore they should not call
+
+  }
 
   @override
   void dispose() {
@@ -188,7 +201,9 @@ class _CreateTournamentState extends State<CreateTournament> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
+                              TeamList list = TeamList();
+                              list.getTeamList(context);
+                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => AddTeamsTournament()),

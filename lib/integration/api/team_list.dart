@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../adminScreens/moreScreen/tournament_screens/add_teams_tournament.dart';
 import '../providers/teamId_provider.dart';
 import '../response_classes/team_data.dart';
 
@@ -16,6 +17,9 @@ class TeamList {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         if (jsonData is List<dynamic>) {
+          final teamList = jsonData.map((e) => TeamData.fromJson(e))
+              .toList();
+          Team.addTeamFromResponse(teamList);
           return jsonData.map((teamJson) => TeamData.fromJson(teamJson)).toList().cast<TeamData>();
         } else {
           throw FormatException('Invalid response from server');

@@ -17,39 +17,30 @@ class TournamentApiService {
   int currentYear = DateTime.now().year;
 
 
-  Future<void> addTeamsInTournament(List<String> teamId, String tournamentId,
-      BuildContext context) async {
-    try {
-      print(Provider
-          .of<LoginProvider>(context, listen: false)
-          .loginResponse
-          ?.signInId);
+  Future<void> addTeamInTournament(List<String> teamsId, String tournamentId, BuildContext context) async{
+    try{
+      print(Provider.of<LoginProvider>(context, listen: false).loginResponse?.signInId);
       final headers = {
-        'Content-Type': 'application/json',
+        'Content-Type' : 'application/json',
       };
-
       final body = jsonEncode({
-        "tournamentId": tournamentId,
-        "players": teamId,
-        "creatorId": Provider
-            .of<LoginProvider>(context, listen: false)
-            .loginResponse
-            ?.signInId
+        "tournamentId" : tournamentId,
+        "teamsId" : teamsId,
+        "tournamentCreatorId" : Provider.of<LoginProvider>(context, listen: false).loginResponse?.signInId
       });
 
-      final response = await http.put(
-          Uri.parse(addTeamInTournamentUrl), headers: headers, body: body);
-      if (response.statusCode == 200) {
+      final response = await http.put(Uri.parse(addTeamInTournamentUrl), headers: headers, body: body);
+      if(response.statusCode == 200){
         final jsonData = jsonDecode(response.body);
-        if (jsonData) {
-          print("workded");
-        } else {
-          print("not worked");
+        if(jsonData){
+          print("worked");
+        }else {
+          print("Not-Worked");
         }
       }
-    } on http.ClientException catch (e) {
+    } on http.ClientException {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Network Error : $e")));
+          .showSnackBar(SnackBar(content: Text("Network Error")));
     } on FormatException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid URL: $e')),
@@ -61,6 +52,8 @@ class TournamentApiService {
       );
     }
   }
+
+
 
   Future<TournamentResponse?> createTournament(
       String tournamentName,
@@ -118,6 +111,8 @@ class TournamentApiService {
     }
     return null;
   }
+
+
 
 
 }

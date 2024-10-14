@@ -11,7 +11,6 @@ import '../response_classes/player_data_model.dart';
 import '../response_classes/player_role_response.dart';
 
 class PlayerApi {
-
   final playerListUrl = "http://localhost:8080/capl/player/listOf/player/ByRole";
   final getPlayerByRoleUrl = "http://localhost:8080/capl/team/listOf/player/ByRole/from/Team";
   final addPlayerInTeamUrl = "http://localhost:8080/capl/team/add/player";
@@ -167,67 +166,3 @@ class PlayerApi {
   }
 
 }
-
-// class PlayerUpdateAccount {
-//   final String updatePlayerAccountUrl = 'http://localhost:8080/capl/player/update/profile';
-//
-//   Future<void> updatePlayerAccountApi(String playerPhotoUrl, String playerName,
-//       String playerNickName, String playerMobNumber, String playerEmail,
-//       String address, String playerType, String playerSubType , BuildContext context) async {
-//     try {
-//       final counter = Provider.of<LoginProvider>(context, listen: false);
-//       final response = await http.put(Uri.parse(updatePlayerAccountUrl),
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: jsonEncode({
-//             "playerId": counter.loginResponse?.creatorId,
-//             "playerProfilePhotoUrl": playerPhotoUrl,
-//             "playerName": playerName,
-//             "playerNickName": playerNickName,
-//             "playerPhone": playerMobNumber,
-//             "playerEmail": playerEmail,
-//             "playerPassword": "",
-//             "playerDob": "",
-//             "playerAddress": address,
-//             "playerType": playerType,
-//             "playerSubType": playerSubType
-//           })
-//       );
-//
-//       if(response.statusCode == 200){
-//         final jsonData = jsonDecode(response.body);
-//         print(jsonData);
-//         if (jsonData['success']) {
-//           Navigator.pop(context);
-//         }
-//         else {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             SnackBar(content: Text('')),
-//           );
-//         }
-//       }
-//       else {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Server error: ${response.statusCode}')),
-//         );
-//       }
-//     }
-//     on http.ClientException catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Network error: $e')),
-//       );
-//       print("$e");
-//     } on FormatException catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Invalid response from server')),
-//       );
-//     } catch (e) {
-//       print('Unknown Error: $e'); // it is use for the error print in console
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(
-//             content: Text('An unknown error occurred. Please try again.')),
-//       );
-//     }
-//   }
-// }

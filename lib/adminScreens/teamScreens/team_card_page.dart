@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
 import '../../integration/response_classes/team_data.dart';
 import 'teamPlayersScreens/member_screen.dart';
 class DecorateTeam extends StatelessWidget {

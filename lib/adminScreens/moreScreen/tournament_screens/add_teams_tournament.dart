@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merge_capl/integration/api/tournament_api_service.dart';
 
+import '../../../integration/api/player_list.dart';
 import '../../../integration/api/team_list.dart';
 import '../../../integration/response_classes/team_data.dart';
 
@@ -36,6 +37,7 @@ class Team {
   }
 }
 
+
 class AddTeamsTournament extends StatefulWidget {
 
   const AddTeamsTournament({super.key});
@@ -47,9 +49,8 @@ class AddTeamsTournament extends StatefulWidget {
 class _AddTeamsTournamentState extends State<AddTeamsTournament> {
 
   Future<Team?>? teamResponse;
-
   Map<int, bool> selectedTeams = {};
-  List<String> selectedTeamId = [];
+  List<String> selectedTeamIdList = [];
 
   TournamentApiService api = TournamentApiService();
 
@@ -66,7 +67,7 @@ class _AddTeamsTournamentState extends State<AddTeamsTournament> {
           }  return Column(
             children: [
               _buildHeader(screenWidth, screenHeight),
-              _buildPlayerList(),
+              _buildTeamList(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 25),
                 child: _buildApplyButton(),
@@ -121,18 +122,18 @@ class _AddTeamsTournamentState extends State<AddTeamsTournament> {
     );
   }
 
-  Widget _buildPlayerList() {
+  Widget _buildTeamList() {
     return Expanded(
       child: ListView.builder(
         itemCount: Team.teams.length,
         itemBuilder: (context, index) {
-          return _buildPlayerTile(index, Team.teams[index].inTournament);
+          return _buildTeamTile(index, Team.teams[index].inTournament);
         },
       ),
     );
   }
 
-  Widget _buildPlayerTile(int index, bool inTeamStatus) {
+  Widget _buildTeamTile(int index, bool inTeamStatus) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -237,16 +238,13 @@ class _AddTeamsTournamentState extends State<AddTeamsTournament> {
             ),
             onPressed: () {
               // Store selected player IDs in selectedPlayerId list
-              selectedTeamId.clear();
+              selectedTeamIdList.clear();
               for (int i = 0; i < Team.teams.length; i++) {
                 if (selectedTeams[i] ?? false) {
-                  selectedTeamId.add(Team.teams[i].teamId);
+                  selectedTeamIdList.add(Team.teams[i].teamId);
                 }
               }
-              // this helps to call my api add player in team correctly...
-              api.addTeamsInTournament(selectedTeamId,"widget.!", context);
-              // print('Selected player IDs: $selectedPlayerId');
-              Navigator.pop(context);
+             Navigator.pop(context, selectedTeamIdList);
             },
           ),
         ),
