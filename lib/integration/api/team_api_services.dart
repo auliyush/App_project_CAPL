@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:merge_capl/integration/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 import '../../adminScreens/moreScreen/tournament_screens/add_teams_tournament.dart';
-import '../providers/teamId_provider.dart';
 import '../response_classes/team_data.dart';
 
 class TeamApiServices {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merge_capl/integration/api/feedback_api_service.dart';
 
 class FeedBackScreen extends StatefulWidget {
   const FeedBackScreen({super.key});
@@ -9,6 +10,8 @@ class FeedBackScreen extends StatefulWidget {
 }
 
 class _FeedBackScreenState extends State<FeedBackScreen> {
+
+  final feedbackController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +65,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       child: Container(
                         margin: EdgeInsets.only(top: 0),
                         child: TextField(
+                          controller: feedbackController,
                           style: TextStyle(
                           ),
                           maxLines: 12,
@@ -99,7 +103,10 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                               foregroundColor: Colors.grey,
                               minimumSize: Size(300, 60)
                           ),
-                          onPressed: (){},
+                          onPressed: () async{
+                            FeedbackApiService api = FeedbackApiService();
+                            await api.createFeedbackApi(feedbackController.text, context);
+                          },
                           child: const Text(
                             'Submit',
                             style: TextStyle(
