@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:merge_capl/navigation/bottom_nav_screen.dart';
 import 'package:merge_capl/start/Login.dart';
 
+import '../integration/api/api_services.dart';
+
 
 class TournamentScreen extends StatefulWidget {
 
@@ -27,7 +29,7 @@ class _TeamScreenState extends State<TournamentScreen> {
               children: [
                 Container(
                   height: 130,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/bg.jpg'),
                       fit: BoxFit.cover,
@@ -43,7 +45,7 @@ class _TeamScreenState extends State<TournamentScreen> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserBottomNav()));
+                       Navigator.pop(context);
                     },
                   ),
                 ),

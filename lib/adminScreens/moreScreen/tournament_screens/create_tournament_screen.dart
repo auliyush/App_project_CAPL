@@ -9,6 +9,9 @@ import '../../../integration/api/team_list.dart';
 import '../../../integration/response_classes/team_data.dart';
 
 class CreateTournament extends StatefulWidget {
+
+  static List<String>? selectedTeamList = [];
+
   const CreateTournament({Key? key}) : super(key: key);
 
   @override
@@ -29,6 +32,8 @@ class _CreateTournamentState extends State<CreateTournament> {
   DateTime? _tournamentEndDate;
   late Future<List<TeamData>?> _future;
   TeamList list = TeamList();
+
+
 
 
   @override
@@ -302,16 +307,17 @@ class _CreateTournamentState extends State<CreateTournament> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              // if (_selectedTeams.length !=
-                              //     int.parse(_numberOfTeamsController.text)) {
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //     SnackBar(
-                              //       content: Text(
-                              //           'Please select exactly ${_numberOfTeamsController
-                              //               .text} teams'),
-                              //     ),
-                              //   );
-                              // } else {
+                              print(CreateTournament.selectedTeamList);
+                              if (CreateTournament.selectedTeamList?.length !=
+                                  int.parse(_numberOfTeamsController.text)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Please select exactly ${_numberOfTeamsController
+                                            .text} teams'),
+                                  ),
+                                );
+                              } else {
                               //   /// here i have to call an api of create tournament
                                 TournamentApiService service = TournamentApiService();
                                 service.createTournament(
@@ -319,9 +325,10 @@ class _CreateTournamentState extends State<CreateTournament> {
                                     startDateString!,
                                     endDateString!,
                                     _stadiumNameController.text,
-                                    '${cityController.text} ${stateController.text} ${pinCodeController.text} ',
+                                    '${cityController.text} ${stateController.text}-${pinCodeController.text}',
+                                    CreateTournament.selectedTeamList!,
                                     context);
-                              // }
+                              }
                             }
                           },
                         ),

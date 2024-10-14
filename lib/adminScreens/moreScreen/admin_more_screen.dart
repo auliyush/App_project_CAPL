@@ -4,6 +4,7 @@ import 'package:merge_capl/start/Login.dart';
 import '../../more_screens/about_us.dart';
 import '../../more_screens/feedback_screen.dart';
 import '../../more_screens/results_screen.dart';
+import '../../tournament_screens/tournament_screen.dart';
 import 'tournament_screens/create_tournament_screen.dart';
 import '../admin_bottom_nav.dart';
 
@@ -80,10 +81,17 @@ class _AdminMorePageState extends State<AdminMorePage> {
                 },
               ),
               _buildCard(
-                  title: 'Tournament',
+                  title: 'Create Tournament',
                   icon: Icons.touch_app,
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTournament()));
+                  }
+              ),
+              _buildCard(
+                  title: 'Tournament',
+                  icon: Icons.tour,
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  TournamentScreen()));
                   }
               ),
               _buildCard(

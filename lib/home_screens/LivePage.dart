@@ -11,6 +11,7 @@ class LivePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
           title: const Text(
               'Live Match',

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:merge_capl/adminScreens/moreScreen/tournament_screens/create_tournament_screen.dart';
 import 'package:merge_capl/integration/api/tournament_api_service.dart';
 
 import '../../../integration/api/player_list.dart';
@@ -242,9 +243,11 @@ class _AddTeamsTournamentState extends State<AddTeamsTournament> {
               for (int i = 0; i < Team.teams.length; i++) {
                 if (selectedTeams[i] ?? false) {
                   selectedTeamIdList.add(Team.teams[i].teamId);
+                  CreateTournament.selectedTeamList?.add(Team.teams[i].teamId);
                 }
               }
-             Navigator.pop(context, selectedTeamIdList);
+
+             Navigator.pop(context);
             },
           ),
         ),
