@@ -187,6 +187,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                         Container(
                           width: 140,
                           child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             controller: _numberOfTeamsController,
                             keyboardType: TextInputType.number,
                             decoration: _inputDecoration('No. of Teams *'),
@@ -211,7 +212,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                                Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddTeamsTournament()),
+                                    builder: (context) => AddTeamsTournament(noOfTeams: int.parse(_numberOfTeamsController.text),)),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -307,7 +308,6 @@ class _CreateTournamentState extends State<CreateTournament> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              print(CreateTournament.selectedTeamList);
                               if (CreateTournament.selectedTeamList?.length !=
                                   int.parse(_numberOfTeamsController.text)) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -328,6 +328,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                                     '${cityController.text} ${stateController.text}-${pinCodeController.text}',
                                     CreateTournament.selectedTeamList!,
                                     context);
+                                Navigator.pop(context);
                               }
                             }
                           },

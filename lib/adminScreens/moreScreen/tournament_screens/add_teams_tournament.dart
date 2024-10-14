@@ -40,8 +40,8 @@ class Team {
 
 
 class AddTeamsTournament extends StatefulWidget {
-
-  const AddTeamsTournament({super.key});
+  final int noOfTeams;
+  const AddTeamsTournament({super.key, required this.noOfTeams});
 
   @override
   State<AddTeamsTournament> createState() => _AddTeamsTournamentState();
@@ -212,47 +212,85 @@ class _AddTeamsTournamentState extends State<AddTeamsTournament> {
   }
 
   Widget _buildApplyButton() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
-      child: Center(
-        child: Transform(
-          transform: Matrix4.skewX(-0.2),
-          child: ElevatedButton(
-            child: Text(
-              'Apply',
-              style: TextStyle(
-                fontFamily: "Netflix",
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-                letterSpacing: 0.2,
-                color: Colors.white,
+    if(selectedTeams.length == widget.noOfTeams) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 24.0),
+        child: Center(
+          child: Transform(
+            transform: Matrix4.skewX(-0.2),
+            child: ElevatedButton(
+              child: Text(
+                'Apply',
+                style: TextStyle(
+                  fontFamily: "Netflix",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                  letterSpacing: 0.2,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo.shade900,
-              elevation: 15,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo.shade900,
+                elevation: 15,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 18, horizontal: 40),
+                shadowColor: Colors.blue.shade900,
               ),
-              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 40),
-              shadowColor: Colors.blue.shade900,
-            ),
-            onPressed: () {
-              // Store selected player IDs in selectedPlayerId list
-              selectedTeamIdList.clear();
-              for (int i = 0; i < Team.teams.length; i++) {
-                if (selectedTeams[i] ?? false) {
-                  selectedTeamIdList.add(Team.teams[i].teamId);
-                  CreateTournament.selectedTeamList?.add(Team.teams[i].teamId);
+              onPressed: () {
+                // Store selected player IDs in selectedPlayerId list
+                // selectedTeamIdList.clear();
+                for (int i = 0; i < Team.teams.length; i++) {
+                  if (selectedTeams[i] ?? false) {
+                    selectedTeamIdList.add(Team.teams[i].teamId);
+                  }
                 }
-              }
-
-             Navigator.pop(context);
-            },
+                CreateTournament.selectedTeamList = selectedTeamIdList;
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+    else {
+      return Padding(
+        padding: const EdgeInsets.only(top: 24.0),
+        child: Center(
+          child: Transform(
+            transform: Matrix4.skewX(-0.2),
+            child: ElevatedButton(
+              child: Text(
+                'Apply',
+                style: TextStyle(
+                  fontFamily: "Netflix",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                  letterSpacing: 0.2,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo.shade900,
+                elevation: 15,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 18, horizontal: 40),
+                shadowColor: Colors.blue.shade900,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("Please Select  ${widget.noOfTeams - selectedTeams.length} more")));
+              }
+
+            ),
+          ),
+        ),
+      );
+    }
+
   }
 
 }

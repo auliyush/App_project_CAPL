@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/navigation/bottom_nav_screen.dart';
 import 'package:merge_capl/start/Login.dart';
+import 'package:provider/provider.dart';
 
 import '../integration/api/api_services.dart';
+import '../integration/providers/login_provider.dart';
 
 
 class TournamentScreen extends StatefulWidget {
@@ -45,7 +47,14 @@ class _TeamScreenState extends State<TournamentScreen> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                       Navigator.pop(context);
+                        if( Provider.of<LoginProvider>
+                          (context, listen: false).loginResponse?.role.toLowerCase() == "admin") {
+                          Navigator.pop(context);
+                        } else {
+                          ApiServices obj = ApiServices();
+                          obj.navigateToBottomNav(context);
+                        }
+
                     },
                   ),
                 ),
