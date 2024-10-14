@@ -2,9 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:merge_capl/adminScreens/moreScreen/tournament_screens/create_tournament_screen.dart';
 import 'package:merge_capl/integration/api/tournament_api_service.dart';
-
-import '../../../integration/api/player_list.dart';
-import '../../../integration/api/team_list.dart';
 import '../../../integration/response_classes/team_data.dart';
 
 class Team {

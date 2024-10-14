@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:merge_capl/integration/api/team_api_services.dart';
 import 'package:provider/provider.dart';
 import '../../../integration/providers/login_provider.dart';
 import '../../../integration/response_classes/team_data.dart';
@@ -76,6 +77,7 @@ class _MemberScreenState extends State<MemberScreen> {
                         ),
                       ),
                     ),
+                    // team delete button
                     Padding(
                       padding: const EdgeInsets.only(left: 18, top: 70),
                       child: _buildDeleteButton(widget.teamData.teamCreatorId),
@@ -141,9 +143,11 @@ class _MemberScreenState extends State<MemberScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                //onConfirm(); // Execute the confirm callback
-                Navigator.of(context).pop(); // Close the dialog
+              onPressed: () async{
+                TeamApiServices obj = TeamApiServices();
+                await obj.deleteTeam(widget.teamData.teamId, context);
+                Navigator.pop(context);
+                // Close the dialog
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.red, // Set text color to red

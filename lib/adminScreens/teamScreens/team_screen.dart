@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/adminScreens/admin_bottom_nav.dart';
-import 'package:merge_capl/integration/api/team_list.dart';
+import 'package:merge_capl/integration/api/team_api_services.dart';
 import '../../integration/response_classes/team_data.dart';
 import 'team_card_page.dart';
 import 'create_team_screen.dart';
@@ -11,11 +11,12 @@ class TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<TeamScreen> {
   late Future<List<TeamData>?> _future;
-  TeamList list = TeamList();
+  TeamApiServices list = TeamApiServices();
 
   @override
   void initState() {
     super.initState();
+    // Initialize the future once in initState.
     _future = list.getTeamList(context);
   }
 
@@ -23,20 +24,19 @@ class _TeamScreenState extends State<TeamScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 20, bottom: 15),
         child: FloatingActionButton(
           heroTag: null,
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CreateTeamScreen()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateTeamScreen()),
+            );
           },
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 30,
-          ),
+          child: Icon(Icons.add, color: Colors.white, size: 30),
           backgroundColor: Color(0xFF3b3b6d),
         ),
       ),
@@ -46,7 +46,6 @@ class _TeamScreenState extends State<TeamScreen> {
             height: 130,
             child: Stack(
               children: [
-                // background image
                 Container(
                   height: 130,
                   decoration: BoxDecoration(
@@ -56,25 +55,24 @@ class _TeamScreenState extends State<TeamScreen> {
                     ),
                   ),
                 ),
-                // back button
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.02,
-                      vertical: screenHeight * 0.02),
+                    horizontal: screenWidth * 0.02,
+                    vertical: screenHeight * 0.02,
+                  ),
                   child: IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AdminBottomNav()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => AdminBottomNav()),
+                            (route) => false,
+                      );
                     },
                   ),
                 ),
-                // screen name
                 Padding(
                   padding: const EdgeInsets.only(left: 18, top: 70),
                   child: Text(
@@ -103,26 +101,22 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: FutureBuilder(
-                    future: _future,
+                  child: FutureBuilder<List<TeamData>?>(
+                    future: _future, // Future initialized once in initState.
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data != null) {
-                          return ListView.builder(
-                            shrinkWrap: false,
-                            physics: ClampingScrollPhysics(),
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return DecorateTeam(teamData: snapshot.data![index]);
-                            },
-                          );
-                        } else {
-                          return Text('No data available');
-                        }
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text('No data available'));
+                      } else {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return DecorateTeam(teamData: snapshot.data![index]);
+                          },
+                        );
                       }
                     },
                   ),
@@ -135,3 +129,4 @@ class _TeamScreenState extends State<TeamScreen> {
     );
   }
 }
+

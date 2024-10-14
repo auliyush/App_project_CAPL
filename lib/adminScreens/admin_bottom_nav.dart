@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:merge_capl/integration/api/team_list.dart';
+import 'package:merge_capl/integration/api/team_api_services.dart';
 import 'package:merge_capl/adminScreens/teamScreens/team_screen.dart';
 
 import '../home_screens/home.dart';
@@ -88,7 +88,7 @@ class _AdminBottomNavState extends State<AdminBottomNav> {
           setState(() {
             _currentIndex = index;
             if(index == 1) {
-              TeamList list = TeamList();
+              TeamApiServices list = TeamApiServices();
               list.getTeamList(context);
             }
           });

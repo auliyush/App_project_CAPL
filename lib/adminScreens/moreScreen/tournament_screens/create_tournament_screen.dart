@@ -5,7 +5,7 @@ import 'package:merge_capl/adminScreens/teamScreens/create_team_screen.dart';
 import 'package:merge_capl/integration/api/tournament_api_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-import '../../../integration/api/team_list.dart';
+import '../../../integration/api/team_api_services.dart';
 import '../../../integration/response_classes/team_data.dart';
 
 class CreateTournament extends StatefulWidget {
@@ -31,7 +31,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   DateTime? _tournamentStartDate;
   DateTime? _tournamentEndDate;
   late Future<List<TeamData>?> _future;
-  TeamList list = TeamList();
+  TeamApiServices list = TeamApiServices();
 
 
 
@@ -208,7 +208,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              TeamList list = TeamList();
+                              TeamApiServices list = TeamApiServices();
                               list.getTeamList(context);
                                Navigator.push(
                                 context,
