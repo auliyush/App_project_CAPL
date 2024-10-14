@@ -87,15 +87,15 @@ class _CreateTournamentState extends State<CreateTournament> {
   InputDecoration _inputDecoration(String labelText) {
     return InputDecoration(
       labelText: labelText,
-      labelStyle: const TextStyle(color: Colors.grey),
+      labelStyle: const TextStyle(color: Colors.black87),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
         borderSide: const BorderSide(color: Colors.blue, width: 2.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-      ),
+        borderSide: const BorderSide(color: Colors.grey, width: 2.0),
+      )
     );
   }
 
@@ -203,7 +203,8 @@ class _CreateTournamentState extends State<CreateTournament> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Container(
+                        // add teams button
+                        SizedBox(
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
@@ -229,6 +230,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                     ),
 
                     const SizedBox(height: 20),
+                    // tournament date text
                     const Text(
                       'Tournament Date',
                       style: TextStyle(
@@ -237,9 +239,11 @@ class _CreateTournamentState extends State<CreateTournament> {
                           color: Colors.blueGrey),
                     ),
                     const SizedBox(height: 10),
+                    // Select start date and end date text
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        // start date button
                         ElevatedButton(
                           onPressed: () => _selectStartDate(context),
                           style: ElevatedButton.styleFrom(
@@ -257,6 +261,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),
+                        // End date button
                         ElevatedButton(
                           onPressed: () => _selectEndDate(context),
                           style: ElevatedButton.styleFrom(
@@ -282,19 +287,6 @@ class _CreateTournamentState extends State<CreateTournament> {
                       child: Transform(
                         transform: Matrix4.skewX(-0.2),
                         child: ElevatedButton(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15),
-                            child: Text(
-                              'Submit',
-                              style: TextStyle(
-                                fontFamily: "Netflix",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 22,
-                                letterSpacing: 0.2,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue.shade900,
                             elevation: 15,
@@ -308,7 +300,24 @@ class _CreateTournamentState extends State<CreateTournament> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              if (CreateTournament.selectedTeamList?.length !=
+                              // start date validation
+                              if(_tournamentStartDate == null){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Please Select Start Date'),
+                                  ),
+                                );
+                                // end date validation
+                              } else if(_tournamentEndDate == null){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Please Select End Date'),
+                                  ),
+                                );
+                              }
+                              else if (CreateTournament.selectedTeamList?.length !=
                                   int.parse(_numberOfTeamsController.text)) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -332,6 +341,19 @@ class _CreateTournamentState extends State<CreateTournament> {
                               }
                             }
                           },
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontFamily: "Netflix",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 22,
+                                letterSpacing: 0.2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
