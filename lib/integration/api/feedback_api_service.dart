@@ -9,14 +9,13 @@ import '../providers/login_provider.dart';
 class FeedbackApiService {
   final feedbackUrl = "http://localhost:8080/Feedback/createFeedback";
 
-  Future<void> createFeedbackApi (String feedbackDes, BuildContext context) async {
+  Future<void> createFeedbackApi (String feedbackDescription, BuildContext context) async {
     DateTime now = DateTime.now();
     final dateFormat = DateFormat('yyyy-MM-dd');
     final formattedDate = dateFormat.format(now);
 
-    final timeFormat = DateFormat('HH:mm:ss');
-    final formattedTime = timeFormat.format(now);
-
+    // final timeFormat = DateFormat('HH:mm:ss');
+    // final formattedTime = timeFormat.format(now);
 
     try {
       final counter = Provider.of<LoginProvider>(
@@ -30,15 +29,12 @@ class FeedbackApiService {
         body: jsonEncode({
           "userId" : counter,
           "feedbackSubmitDate" : formattedDate,
-          "feedbackSubmitTime" : formattedTime,
-          "feedbackDescription" : feedbackDes
+          // "feedbackSubmitTime" : formattedTime,
+          "feedbackDescription" : feedbackDescription
         }),
       );
-      print(counter);
       if(response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        print(jsonData);
-        print(counter);
+        print('logged Id : $counter');
         if (context.mounted) { // Check if widget is still mounted
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Successfully Feedback Submitted')),
@@ -46,21 +42,23 @@ class FeedbackApiService {
         } else {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Something went wrong')),
+              const SnackBar(content: Text('Something went wrong Try Again')),
             );
           }
         }
       }
     } on http.ClientException catch (e) {
+      print('ClientException Occurred : $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Network Error : $e")),
+          const SnackBar(content: Text('Something Went Wrong')),
         );
       }
     } on FormatException catch (e) {
+      print('FormatException Occurred : $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid response from server')),
+          const SnackBar(content: Text('Something Went Wrong')),
         );
       }
     } catch (e) {

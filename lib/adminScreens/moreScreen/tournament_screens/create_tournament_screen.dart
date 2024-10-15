@@ -33,8 +33,7 @@ class _CreateTournamentState extends State<CreateTournament> {
   late Future<List<TeamData>?> _future;
   TeamApiServices list = TeamApiServices();
 
-
-
+  int? numberOfTeams;
 
   @override
   void initState() {
@@ -208,13 +207,35 @@ class _CreateTournamentState extends State<CreateTournament> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              TeamApiServices list = TeamApiServices();
-                              list.getTeamList(context);
-                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddTeamsTournament(noOfTeams: int.parse(_numberOfTeamsController.text),)),
-                              );
+                              if (_numberOfTeamsController.text.isNotEmpty) {
+                                int numberOfTeams =
+                                    int.parse(_numberOfTeamsController.text);
+                                if (numberOfTeams <= 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please Enter valid Number of Teams'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                } else {
+                                  TeamApiServices list = TeamApiServices();
+                                  list.getTeamList(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddTeamsTournament(noOfTeams: int.parse(_numberOfTeamsController.text),)),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Please Enter Number of Teams'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF3b3b6d),
