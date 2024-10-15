@@ -3,6 +3,7 @@ import '../home_screens/home.dart';
 import '../more_screens/more_screen.dart';
 import '../stats/stats_screen.dart';
 import '../team_screens/player_team_screen.dart';
+import '../tournament_screens/tournament_list_sceen.dart';
 import '../tournament_screens/tournament_screen.dart';
 
 
@@ -19,7 +20,7 @@ class _UserBottomNavState extends State<UserBottomNav> with SingleTickerProvider
   final List<Widget> _tabs = [
     MyHomePage(),
     PlayerTeamScreen(),
-    TournamentScreen(),
+    TournamentListScreen(),
     Stats(
       playersTeamLogoUrl: "assets/images/teamlogo.png",
       playersProfileUrl: "assets/images/rohitsharma.webp",

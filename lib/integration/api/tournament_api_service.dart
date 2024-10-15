@@ -81,6 +81,7 @@ class TournamentApiService {
   }
 
   Future<void> addTeamInTournament(List<String> teamsId ,BuildContext context) async{
+    print("enter");
     try{
       print(Provider.of<LoginProvider>(context, listen: false).loginResponse?.signInId);
       final headers = {
@@ -94,8 +95,10 @@ class TournamentApiService {
 
       final response = await http.put(Uri.parse(addTeamInTournamentUrl), headers: headers, body: body);
       if(response.statusCode == 200){
+        print("enter2");
         final jsonData = jsonDecode(response.body);
         if(jsonData){
+          print("enter3");
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Tournament Created Success")));
         }else {

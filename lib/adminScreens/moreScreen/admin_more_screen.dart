@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:merge_capl/integration/api/api_services.dart';
 import 'package:merge_capl/start/Login.dart';
+import 'package:merge_capl/tournament_screens/tournament_list_sceen.dart';
 import '../../more_screens/about_us.dart';
 import '../../more_screens/feedback_screen.dart';
 import '../../more_screens/results_screen.dart';
@@ -91,7 +92,7 @@ class _AdminMorePageState extends State<AdminMorePage> {
                   title: 'Tournament',
                   icon: Icons.tour,
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  TournamentScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  TournamentListScreen()));
                   }
               ),
               _buildCard(
